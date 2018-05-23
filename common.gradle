@@ -1,0 +1,239 @@
+// Core versions
+ext.versions = [
+    compileSdk: 27,
+    targetSdk: 27,
+    minSdk: 17,
+    buildTools: '27.0.3',
+    core: [
+        androidPlugin: '3.2.0-alpha15',
+        googleServicesPlugin: '3.2.1',
+        kotlin: '1.2.41',
+        serialization: '0.5.0',
+        reflectLite: '1.0.0',
+        dagger: '2.16'
+    ]
+]
+
+// Additional versions which may reference to core versions
+ext.versions += [
+    support: [
+        support: '27.1.1',
+        constraint: '1.1.0',
+        flex: '0.3.2',
+        multidex: '1.0.3'
+    ],
+    googleServices: [
+        general: '15.0.1',
+    ],
+    firebase: [
+        core: '15.0.2',
+        messaging: '15.0.2',
+        analytics: '15.0.2'
+    ],
+    dataBinding: [
+        lastAdapter: '2.3.0',
+        compiler: versions.core.androidPlugin
+    ],
+    network: [
+        gson: '2.8.0',
+        retrofit: '2.4.0',
+        okhttp: '3.10.0',
+        glide: '4.7.1',
+        kotlinxConverter: '0.0.1'
+    ],
+    rx: [
+        java: '2.1.12',
+        android: '2.0.2',
+        kotlin: '2.2.0',
+        modern: '1.0.6'
+    ],
+    utils: [
+        inputMask: '3.4.0',
+        trayPrefs: '0.12.0',
+        cicerone: '3.0.0'
+    ],
+    debug: [
+         crashlytics: '2.9.2',
+         timber: '4.7.0'
+    ],
+    plugins: [
+        versions: '0.17.0'
+    ]
+]
+
+ext.deps = [
+    core: [
+        // Android
+        androidPlugin: "com.android.tools.build:gradle:$versions.core.androidPlugin",
+        googleServicesPlugin: "com.google.gms:google-services:$versions.core.googleServicesPlugin",
+            
+        // Kotlin
+        kotlinStdlib: "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.core.kotlin",
+        kotlinSerializationRuntime: "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$versions.core.kotlinSerialization",
+        kotlinReflect: "org.jetbrains.kotlin:kotlin-reflect:$versions.core.kotlin",
+        kotlinReflectLite: "org.jetbrains.kotlinx:kotlinx.reflect.lite:$versions.core.kotlinReflectLite",
+        kotlinPlugin: "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.core.kotlin",
+        kotlinExtensionsPlugin: "org.jetbrains.kotlin:kotlin-android-extensions:$versions.core.kotlin",
+        kotlinSerializationPlugin:  "org.jetbrains.kotlinx:kotlinx-gradle-serialization-plugin:$versions.core.kotlinSerialization",
+        
+        // Dagger
+        dagger: "com.google.dagger:dagger:$versions.core.dagger",
+        daggerAndroid: "com.google.dagger:dagger-android:$versions.core.dagger",
+        daggerAndroidSupport: "com.google.dagger:dagger-android-support:$versions.core.dagger",
+        daggerAndroidProcessor: "com.google.dagger:dagger-android-processor:$versions.core.dagger",
+        daggerCompiler: "com.google.dagger:dagger-compiler:$versions.core.dagger",
+    ],
+    firebase: [
+        core: "com.google.firebase:firebase-core:$versions.firebase.core",
+        analytics: "com.google.firebase:firebase-analytics:$versions.firebase.analytics",
+        messaging: "com.google.firebase:firebase-messaging:$versions.firebase.messaging"
+    ],
+    support: [
+        v4: "com.android.support:support-v4:$versions.support.support",
+        appcompat: "com.android.support:appcompat-v7:$versions.support.support",
+        design: "com.android.support:design:$versions.support.support",
+        recyclerView: "com.android.support:recyclerview-v7:$versions.support.support",
+        card: "com.android.support:cardview-v7:$versions.support.support",
+        constraintLayout: "com.android.support.constraint:constraint-layout:$versions.support.constraint",
+        flexLayout: "com.google.android:flexbox:$versions.support.flex",
+        multidex: "com.android.support:multidex:$versions.support.multidex",
+        multidexInstrumentation: "com.android.support:multidex-instrumentation:$versions.support.multidex",
+    ],
+    dataBinding: [
+        compiler: "androidx.databinding:databinding-compiler:$versions.dataBinding.compiler",
+        lastAdapter: "com.github.nitrico.lastadapter:lastadapter:$versions.dataBinding.lastAdapter"
+    ],
+    rx: [
+        java: "io.reactivex.rxjava2:rxjava:$versions.rx.java",
+        android: "io.reactivex.rxjava2:rxandroid:$versions.rx.android",
+        kotlin: "io.reactivex.rxjava2:rxkotlin:$versions.rx.kotlin",
+        modern: "com.github.SunnyDayDev:ModernRx:$versions.rx.modern@aar"
+    ],
+    network: [
+        gson: "com.google.code.gson:gson:$versions.network.gson",
+        retrofit: "com.squareup.retrofit2:retrofit:$versions.network.retrofit",
+        converterGson:  "com.squareup.retrofit2:converter-gson:$versions.network.retrofit",
+        rx: "com.squareup.retrofit2:adapter-rxjava2:$versions.network.retrofit",
+        okhttp: "com.squareup.okhttp3:okhttp:$versions.network.okhttp",
+        logging: "com.squareup.okhttp3:logging-interceptor:$versions.network.okhttp",
+        glide: "com.github.bumptech.glide:glide:$versions.network.glide",
+        glideCompiler: "com.github.bumptech.glide:compiler:$versions.network.glide",
+        kotlinxConverter: "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:$versions.network.kotlinxConverter"
+    ],
+    debug: [
+        crashlytics: "com.crashlytics.sdk.android:crashlytics:$versions.debug.crashlytics@aar",
+        timber: "com.jakewharton.timber:timber:$versions.debug.timber"
+    ],
+    utils: [
+        inputMask: "com.redmadrobot:inputmask:$versions.utils.inputMask",
+        prefs: "net.grandcentrix.tray:tray:$versions.utils.trayPrefs",
+        cicerone: "ru.terrakok.cicerone:cicerone:$versions.utils.cicerone"
+    ],
+    plugins: [
+        versions: "com.github.ben-manes:gradle-versions-plugin:$versions.plugins.versions"
+    ]
+]
+
+ext.deps += [
+        shortcut: [
+                rx: { dependenciesRx() },
+                kotlin: { dependenciesKotlin() },
+                dagger: { kapt -> dependenciesDagger(kapt)}
+        ]
+]
+
+ext.handleRepositories = { handler, buildScript ->
+
+  handler.google()
+  handler.jcenter()
+  handler.mavenCentral()
+  handler.maven { url 'http://dl.bintray.com/kotlin/kotlin-eap' }
+  handler.maven { url 'https://maven.fabric.io/public' }
+  handler.maven { url 'http://www.idescout.com/maven/repo/' }
+  handler.maven { url "https://kotlin.bintray.com/kotlinx" }
+
+  if (!buildScript) {
+      handler.maven { url 'https://jitpack.io' }
+  }
+
+  handler.flatDir { dirs 'libs' }
+
+  // Local project maven
+  handler.maven {
+    def internalMaven = "$project.rootProject.projectDir/maven/"
+    url project.uri(internalMaven)
+  }
+
+}
+
+// Shortcut functions
+
+void dependenciesRx() {
+
+    dependencies {
+        implementation deps.rx.java
+        implementation deps.rx.android
+        implementation deps.rx.kotlin
+        implementation deps.rx.modern
+    }
+
+}
+
+void dependenciesKotlin() {
+
+    dependencies {
+        implementation deps.core.kotlinStdlib
+    }
+
+}
+
+void dependenciesDagger(boolean useKapt) {
+
+    dependencies {
+
+        implementation deps.core.dagger
+        kapt deps.core.daggerCompiler
+        if (useKapt) {
+            kapt deps.core.daggerAndroidProcessor
+        }
+
+    }
+
+}
+
+ext.defaultAndroid = {
+
+    android {
+
+        compileSdkVersion versions.compileSdk
+        buildToolsVersion versions.buildTools
+
+        defaultConfig {
+
+            minSdkVersion versions.minSdk
+            targetSdkVersion versions.targetSdk
+
+            Properties versionsProps = new Properties()
+            file("$rootProject.projectDir/meta/version.properties").withInputStream {
+                versionsProps.load(it)
+            }
+
+            versionCode versionsProps['version.code'].toInteger()
+            versionName versionsProps['version.name']
+
+            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+        }
+
+        buildTypes {
+
+            release {
+                minifyEnabled false
+                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            }
+
+        }
+
+    }
+
+}

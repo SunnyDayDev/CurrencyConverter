@@ -1,0 +1,16 @@
+apply plugin: 'com.android.application'
+
+android {
+
+    defaultAndroid()
+
+    defaultConfig {
+        applicationId "me.sunnydaydev.curencyconverter.app"
+    }
+
+}
+
+dependencies {
+    implementation project(':feature_converter')
+    implementation project(':feature_base')
+}

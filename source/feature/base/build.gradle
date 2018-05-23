@@ -1,0 +1,16 @@
+apply plugin: 'com.android.feature'
+
+android {
+
+    baseFeature true
+
+    defaultAndroid()
+
+}
+
+dependencies {
+    api deps.support.appcompat
+    api deps.support.constraintLayout
+    application project(':app_normal')
+    feature project(':feature_converter')
+}

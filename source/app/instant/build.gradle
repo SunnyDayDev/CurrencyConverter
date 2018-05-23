@@ -1,0 +1,6 @@
+apply plugin: 'com.android.instantapp'
+
+dependencies {
+    implementation project(':feature_converter')
+    implementation project(':feature_base')
+}

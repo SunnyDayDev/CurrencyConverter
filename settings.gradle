@@ -1,0 +1,11 @@
+include ':app_normal'
+project(':app_normal').projectDir = new File('source/app/normal')
+
+include ':app_instant'
+project(':app_instant').projectDir = new File('source/app/instant')
+
+include ':feature_converter'
+project(':feature_converter').projectDir = new File('source/feature/converter')
+
+include ':feature_base'
+project(':feature_base').projectDir = new File('source/feature/base')
