@@ -11,6 +11,6 @@ android {
 dependencies {
     api deps.support.appcompat
     api deps.support.constraintLayout
-    application project(':app_normal')
-    feature project(':feature_converter')
+    application project(':app.normal')
+    feature project(':feature.converter')
 }

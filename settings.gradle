@@ -1,11 +1,27 @@
-include ':app_normal'
-project(':app_normal').projectDir = new File('source/app/normal')
 
-include ':app_instant'
-project(':app_instant').projectDir = new File('source/app/instant')
+// region Apps (installable, instant, etc..)
 
-include ':feature_converter'
-project(':feature_converter').projectDir = new File('source/feature/converter')
+include ':app.normal'
+project(':app.normal').projectDir = new File('source/app/normal')
 
-include ':feature_base'
-project(':feature_base').projectDir = new File('source/feature/base')
+include ':app.instant'
+project(':app.instant').projectDir = new File('source/app/instant')
+
+// endregion
+
+// region Core (ui, general, etc..)
+
+include ':core.ui'
+project(':core.ui').projectDir = new File('source/core/ui')
+
+// endregion
+
+// region Features
+
+include ':feature.converter'
+project(':feature.converter').projectDir = new File('source/feature/converter')
+
+include ':feature.base'
+project(':feature.base').projectDir = new File('source/feature/base')
+
+// endregion
