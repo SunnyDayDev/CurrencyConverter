@@ -3,25 +3,14 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
-
 defaultAndroidModule()
-
-android {
-
-    dataBinding.enabled = true
-
-}
 
 dependencies {
 
-    implementation project(':core')
-
     deps.shortcut.kotlin()
     deps.shortcut.rx()
-    deps.shortcut.dagger(false)
+    deps.shortcut.dagger(true)
 
-    implementation deps.support.appcompat
-
-    kapt deps.dataBinding.compiler
+    implementation deps.debug.timber
 
 }

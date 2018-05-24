@@ -1,16 +1,30 @@
 apply plugin: 'com.android.application'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+defaultAndroidModule()
 
 android {
-
-    defaultAndroid()
 
     defaultConfig {
         applicationId "me.sunnydaydev.curencyconverter.app"
     }
 
+    dataBinding.enabled = true
+
 }
 
 dependencies {
-    implementation project(':feature.converter')
-    implementation project(':feature.base')
+
+    implementation project(':core')
+    implementation project(':core_ui')
+
+    implementation project(':feature_converter')
+    implementation project(':feature_base')
+
+    deps.shortcut.rx()
+    deps.shortcut.kotlin()
+    deps.shortcut.dagger(true)
+
 }

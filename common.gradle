@@ -201,7 +201,7 @@ void dependenciesDagger(boolean useKapt) {
 
 }
 
-ext.defaultAndroid = {
+ext.defaultAndroidModule = {
 
     android {
 

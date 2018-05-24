@@ -4,15 +4,23 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
+defaultAndroidModule()
+
 android {
 
-    defaultAndroid()
-
+    baseFeature false
     dataBinding.enabled = true
 
 }
 
 dependencies {
+
+    application project(':app_normal')
+
+    implementation project(':core')
+    implementation project(':core_ui')
+
+    implementation project(':feature_base')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -21,7 +29,5 @@ dependencies {
     deps.shortcut.dagger(true)
 
     kapt deps.dataBinding.compiler
-
-    implementation project(':feature.base')
     
 }
