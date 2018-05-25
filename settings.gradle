@@ -19,6 +19,13 @@ project(':core_ui').projectDir = new File('source/core/ui')
 
 // endregion
 
+// region Domain
+
+include ':domain_currencies'
+project(':domain_currencies').projectDir = new File('source/domain/currencies')
+
+// endregion
+
 // region Features
 
 include ':feature_converter'

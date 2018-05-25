@@ -7,16 +7,15 @@ import me.sunnydaydev.modernrx.DisposableBag
 import me.sunnydaydev.modernrx.ModernRxSubscriber
 import javax.inject.Singleton
 
-/**
- * Created by sunny on 24.05.2018.
- * mail: mail@sunnydaydev.me
- */
-
 @Singleton
 @Component(
         modules = [CoreProvidesModule::class]
 )
-interface CoreComponent: CoreProvider {
+interface CoreComponent {
+
+    val applicationContext: Context
+
+    val modernRxHandler: ModernRxSubscriber.Handler
 
     @Component.Builder
     interface Builder {

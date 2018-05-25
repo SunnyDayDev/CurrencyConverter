@@ -4,8 +4,9 @@ import dagger.Component
 import dagger.Module
 import me.sunnydaydev.curencyconverter.converter.ConverterActivity
 import me.sunnydaydev.curencyconverter.converter.ConverterViewModel
-import me.sunnydaydev.curencyconverter.coregeneral.di.CoreProvider
+import me.sunnydaydev.curencyconverter.coregeneral.di.CoreComponent
 import me.sunnydaydev.curencyconverter.coreui.di.Injector
+import me.sunnydaydev.curencyconverter.domain.currencies.di.CurrenciesComponent
 import javax.inject.Inject
 
 /**
@@ -13,20 +14,21 @@ import javax.inject.Inject
  * mail: mail@sunnydaydev.me
  */
 
-interface ConverterComponentRequirementsProvider:
-    CoreProvider
+interface ConverterComponentRequirements:
+        CoreComponent,
+        CurrenciesComponent
 
 @Component(
         modules = [ConverterBindModule::class],
-        dependencies = [ConverterComponentRequirementsProvider::class]
+        dependencies = [ConverterComponentRequirements::class]
 )
 interface ConverterComponent: Injector<ConverterActivity> {
 
     object Initializer {
 
-        fun init(provider: ConverterComponentRequirementsProvider): ConverterComponent {
+        fun init(requirements: ConverterComponentRequirements): ConverterComponent {
             return DaggerConverterComponent.builder()
-                    .converterComponentRequirementsProvider(provider)
+                    .converterComponentRequirements(requirements)
                     .build()
         }
 
