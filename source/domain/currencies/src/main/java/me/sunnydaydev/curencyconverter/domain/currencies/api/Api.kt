@@ -12,7 +12,7 @@ import retrofit2.http.Query
 internal interface CurrenciesApi {
 
     object Urls {
-        const val HOST = "https://currenciesconverter.sunnydaydev.me"
+        const val HOST = "https://currencyconverter.sunnydaydev.me"
     }
 
     @GET("latest")
