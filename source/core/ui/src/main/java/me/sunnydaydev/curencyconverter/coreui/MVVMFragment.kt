@@ -7,7 +7,7 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import me.sunnydaydev.curencyconverter.coregeneral.di.InjectionProvider
+import me.sunnydaydev.curencyconverter.coregeneral.di.RequirementsComponentProvider
 import me.sunnydaydev.curencyconverter.coreui.viewModel.BaseVewModel
 
 /**
@@ -22,7 +22,7 @@ abstract class MVVMFragment<Binding: ViewDataBinding>: Fragment()  {
     protected abstract val viewModelVariableId: Int
     protected abstract val vm: BaseVewModel
 
-    protected abstract fun inject(provider: InjectionProvider)
+    protected abstract fun inject(provider: RequirementsComponentProvider)
 
     protected abstract fun onCreateBinding(inflater: LayoutInflater,
                                            container: ViewGroup?,
@@ -59,11 +59,11 @@ abstract class MVVMFragment<Binding: ViewDataBinding>: Fragment()  {
 
     protected fun proceedInjection(context: Context) {
 
-        val parent = parentFragment as? InjectionProvider
+        val parent = parentFragment as? RequirementsComponentProvider
         if (parent != null) {
             inject(parent)
         } else {
-            inject(context.applicationContext as InjectionProvider)
+            inject(context.applicationContext as RequirementsComponentProvider)
         }
 
     }

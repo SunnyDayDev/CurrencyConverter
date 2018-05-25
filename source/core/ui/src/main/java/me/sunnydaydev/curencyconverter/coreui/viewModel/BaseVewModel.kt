@@ -5,10 +5,9 @@ import android.arch.lifecycle.ViewModel
 import android.databinding.Bindable
 import android.databinding.Observable
 import android.databinding.PropertyChangeRegistry
+import me.sunnydaydev.curencyconverter.coregeneral.tryOptional
 import me.sunnydaydev.modernrx.ModernRxSubscriber
 import kotlin.properties.ReadWriteProperty
-import kotlin.reflect.KClass
-import kotlin.reflect.KProperty
 
 /**
  * Created by sunny on 28.04.2018.
@@ -16,8 +15,7 @@ import kotlin.reflect.KProperty
  */
 
 open class BaseVewModel(
-        override val modernRxHandler: ModernRxSubscriber.Handler,
-        private val br: KClass<*>? = null
+        override val modernRxHandler: ModernRxSubscriber.Handler
 ): ViewModel(), LifecycleObserver, Observable, ModernRxSubscriber {
 
     // region Observable
@@ -72,15 +70,5 @@ open class BaseVewModel(
     }
 
     // endregion Observable
-
-    // region bindable
-
-    protected fun <R: BaseVewModel, T: Any?> bindable(
-            initialValue: T,
-            id: Int? = null,
-            onChange: ((T) -> Unit)? = null
-    ): ReadWriteProperty<R, T> = BindableDelegate(initialValue, id, br, onChange)
-
-    // endregion bindable
 
 }

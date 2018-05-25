@@ -3,7 +3,7 @@ package me.sunnydaydev.curencyconverter.coreui
 import android.databinding.ViewDataBinding
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
-import me.sunnydaydev.curencyconverter.coregeneral.di.InjectionProvider
+import me.sunnydaydev.curencyconverter.coregeneral.di.RequirementsComponentProvider
 import me.sunnydaydev.curencyconverter.coreui.viewModel.BaseVewModel
 
 /**
@@ -19,11 +19,11 @@ abstract class MVVMActivity<Binding: ViewDataBinding>: AppCompatActivity() {
 
     protected abstract val binding: Binding
 
-    protected abstract fun inject(provider: InjectionProvider)
+    protected abstract fun inject(provider: RequirementsComponentProvider)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        inject(applicationContext as InjectionProvider)
+        inject(applicationContext as RequirementsComponentProvider)
         binding.setVariable(viewModelVariableId, vm)
         lifecycle.addObserver(vm)
     }

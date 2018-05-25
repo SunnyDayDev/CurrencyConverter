@@ -20,6 +20,8 @@ dependencies {
     implementation project(':core')
     implementation project(':core_ui')
 
+    implementation project(':domain_currencies')
+
     implementation project(':feature_converter')
     implementation project(':feature_base')
 

@@ -1,7 +1,7 @@
 package me.sunnydaydev.curencyconverter.coreui.viewModel
 
+import me.sunnydaydev.curencyconverter.coregeneral.tryOptional
 import kotlin.properties.ReadWriteProperty
-import kotlin.reflect.KClass
 import kotlin.reflect.KProperty
 
 /**
@@ -12,9 +12,22 @@ import kotlin.reflect.KProperty
 class BindableDelegate<in R: BaseVewModel, T: Any?> (
         private var value: T,
         private var id: Int?,
-        private val br: KClass<*>?,
         private val onChange: ((T) -> Unit)? = null
 ): ReadWriteProperty<R, T> {
+
+    companion object {
+
+        private val dataBindingFields by lazy<Map<String, Int>> {
+
+            val clazz = tryOptional(logError = true) {
+                Class.forName("com.android.databinding.library.baseAdapters.BR")
+            } ?: return@lazy emptyMap()
+
+            clazz.fields.associate { it.name to it.getInt(null) }
+
+        }
+
+    }
 
     private var checkedId: Int? = null
 
@@ -34,11 +47,9 @@ class BindableDelegate<in R: BaseVewModel, T: Any?> (
 
     private fun checkAndGetId(property: KProperty<*>): Int {
 
-        return checkedId ?: id ?:
-        br?.java?.fields?.associate { it.name to it.getInt(null) }
-                ?.let { it[property.name] }
-                ?.also { checkedId = it }
-        ?: throw IllegalStateException("BR id or BR class not setted.")
+        return checkedId ?: id
+                ?: dataBindingFields[property.name]?.also { checkedId = it }
+                ?: throw IllegalStateException("Unknown bindable property.")
 
     }
 
@@ -47,6 +58,5 @@ class BindableDelegate<in R: BaseVewModel, T: Any?> (
 fun <R: BaseVewModel, T: Any?> bindable(
         initialValue: T,
         id: Int? = null,
-        br: KClass<*>? = null,
         onChange: ((T) -> Unit)? = null
-): ReadWriteProperty<R, T> = BindableDelegate(initialValue, id, br, onChange)
+): ReadWriteProperty<R, T> = BindableDelegate(initialValue, id, onChange)
