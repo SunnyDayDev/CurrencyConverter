@@ -23,14 +23,26 @@ abstract class MVVMActivity<Binding: ViewDataBinding>: AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        inject(applicationContext as RequirementsComponentProvider)
+
+        proceedInjection()
+
         binding.setVariable(viewModelVariableId, vm)
         lifecycle.addObserver(vm)
+
     }
 
     override fun onDestroy() {
         super.onDestroy()
         binding.unbind()
+    }
+
+    private fun proceedInjection() {
+
+        val requirementsProvider = parent as? RequirementsComponentProvider
+                ?: applicationContext as RequirementsComponentProvider
+
+        inject(requirementsProvider)
+
     }
 
 }

@@ -4,23 +4,22 @@ import dagger.Component
 import me.sunnydaydev.curencyconverter.app.App
 import me.sunnydaydev.curencyconverter.converter.di.ConverterComponentRequirements
 import me.sunnydaydev.curencyconverter.coregeneral.di.CoreComponent
-import me.sunnydaydev.curencyconverter.domain.currencies.di.CurrenciesComponent
-import javax.inject.Scope
+import me.sunnydaydev.curencyconverter.coregeneral.di.CoreProvider
+import me.sunnydaydev.curencyconverter.domain.currencies.di.CurrenciesDomainComponent
+import me.sunnydaydev.curencyconverter.domain.currencies.di.CurrenciesDomainProvider
 
 /**
  * Created by sunny on 24.05.2018.
  * mail: mail@sunnydaydev.me
  */
 
-@Scope annotation class AppScope
-
-@AppScope
 @Component(
-        dependencies = [CoreComponent::class, CurrenciesComponent::class]
+        dependencies = [
+            CoreProvider::class,
+            CurrenciesDomainProvider::class
+        ]
 )
 interface AppComponent:
-        CoreComponent,
-        // Feature requirements providers
         ConverterComponentRequirements {
 
     object Initializer {
@@ -29,11 +28,11 @@ interface AppComponent:
 
             val core = CoreComponent.Initializer.init(app)
 
-            val currencies = CurrenciesComponent.Initializer.init()
+            val currencies = CurrenciesDomainComponent.Initializer.init()
 
             return DaggerAppComponent.builder()
-                    .coreComponent(core)
-                    .currenciesComponent(currencies)
+                    .coreProvider(core)
+                    .currenciesDomainProvider(currencies)
                     .build()
 
         }

@@ -2,6 +2,7 @@ package me.sunnydaydev.curencyconverter.app
 
 import android.app.Application
 import me.sunnydaydev.curencyconverter.app.di.AppComponent
+import me.sunnydaydev.curencyconverter.coregeneral.di.ComponentRequirements
 import me.sunnydaydev.curencyconverter.coregeneral.di.CoreComponent
 import me.sunnydaydev.curencyconverter.coregeneral.di.RequirementsComponentProvider
 
@@ -13,6 +14,6 @@ class App: Application(), RequirementsComponentProvider {
 
     private val appComponent: AppComponent by lazy { AppComponent.Initializer.init(this) }
 
-    override fun <T : CoreComponent> getRequirementsComponent(): T = appComponent as T
+    override fun <T : ComponentRequirements> getComponentRequirements(): T = appComponent as T
 
 }

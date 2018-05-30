@@ -5,8 +5,10 @@ package me.sunnydaydev.curencyconverter.coregeneral.di
  * mail: mail@sunnydaydev.me
  */
 
+interface ComponentRequirements
+
 interface RequirementsComponentProvider {
 
-    fun <T: CoreComponent> getRequirementsComponent(): T
+    fun <T: ComponentRequirements> getComponentRequirements(): T
 
 }

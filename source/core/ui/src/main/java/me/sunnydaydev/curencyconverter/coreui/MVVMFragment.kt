@@ -57,14 +57,13 @@ abstract class MVVMFragment<Binding: ViewDataBinding>: Fragment()  {
         binding = null
     }
 
-    protected fun proceedInjection(context: Context) {
+    private fun proceedInjection(context: Context) {
 
-        val parent = parentFragment as? RequirementsComponentProvider
-        if (parent != null) {
-            inject(parent)
-        } else {
-            inject(context.applicationContext as RequirementsComponentProvider)
-        }
+        val requirementsProvider = parentFragment as? RequirementsComponentProvider
+                ?: activity as? RequirementsComponentProvider
+                ?: context.applicationContext as RequirementsComponentProvider
+
+        inject(requirementsProvider)
 
     }
 

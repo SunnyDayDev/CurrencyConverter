@@ -17,20 +17,24 @@ import me.sunnydaydev.curencyconverter.domain.currencies.api.di.ApiModule
 @Component(
         modules = [CurrenciesModule::class]
 )
-interface CurrenciesComponent {
-
-    val currenciesRepository: CurrenciesRepository
+interface CurrenciesDomainComponent: CurrenciesDomainProvider {
 
     object Initializer {
 
-        fun init(): CurrenciesComponent {
+        fun init(): CurrenciesDomainComponent {
 
-           return DaggerCurrenciesComponent.builder()
+           return DaggerCurrenciesDomainComponent.builder()
                     .build()
 
         }
 
     }
+
+}
+
+interface CurrenciesDomainProvider {
+
+    val currenciesRepository: CurrenciesRepository
 
 }
 

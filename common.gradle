@@ -5,7 +5,7 @@ ext.versions = [
     minSdk: 17,
     buildTools: '27.0.3',
     core: [
-        androidPlugin: '3.2.0-alpha15',
+        androidPlugin: '3.2.0-alpha16',
         googleServicesPlugin: '3.2.1',
         dagger: '2.16'
     ]

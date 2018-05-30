@@ -11,11 +11,7 @@ import javax.inject.Singleton
 @Component(
         modules = [CoreProvidesModule::class]
 )
-interface CoreComponent {
-
-    val applicationContext: Context
-
-    val modernRxHandler: ModernRxSubscriber.Handler
+interface CoreComponent: CoreProvider {
 
     @Component.Builder
     interface Builder {
@@ -36,6 +32,14 @@ interface CoreComponent {
         }
 
     }
+
+}
+
+interface CoreProvider {
+
+    val applicationContext: Context
+
+    val modernRxHandler: ModernRxSubscriber.Handler
 
 }
 
