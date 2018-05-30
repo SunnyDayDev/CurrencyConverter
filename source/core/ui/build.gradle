@@ -22,6 +22,8 @@ dependencies {
 
     implementation deps.support.appcompat
 
+    implementation deps.network.glide
+
     kapt deps.dataBinding.compiler
 
 }

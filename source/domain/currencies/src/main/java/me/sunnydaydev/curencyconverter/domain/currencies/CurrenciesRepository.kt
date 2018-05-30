@@ -1,7 +1,12 @@
 package me.sunnydaydev.curencyconverter.domain.currencies
 
+import android.net.Uri
+import io.reactivex.Observable
 import io.reactivex.Single
+import me.sunnydaydev.curencyconverter.domain.currencies.api.CountryInfo
 import me.sunnydaydev.curencyconverter.domain.currencies.api.CurrenciesApi
+import me.sunnydaydev.curencyconverter.domain.currencies.api.RestCountriesApi
+import java.util.*
 import javax.inject.Inject
 
 /**
@@ -11,20 +16,60 @@ import javax.inject.Inject
 
 interface CurrenciesRepository {
 
-    fun getRatesFor(base: Currency): Single<List<CurrencyRate>>
+    fun getCurrencies(codes: Set<String>? = null): Single<List<Currency>>
+
+    fun getRates(base: String): Single<CurrencyRates>
 
 }
 
 internal class CurrenciesRepositoryImpl @Inject constructor(
         private val api: CurrenciesApi,
-        private val mapper: CurrenciesMapper
+        private val countriesApi: RestCountriesApi
 ): CurrenciesRepository {
 
-    override fun getRatesFor(base: Currency): Single<List<CurrencyRate>> {
-        
-        return api.getRatesForBase(base.alpha3code)
-                .map { mapper.mapRates(it.rates) }
+    private val currenciesCache = mutableMapOf<String, Currency>()
 
+    override fun getRates(base: String): Single<CurrencyRates> {
+        
+        return api.getRatesForBase(base)
+                .map {
+                    CurrencyRates(it.base, it.rates)
+                }
+
+    }
+
+    override fun getCurrencies(codes: Set<String>?): Single<List<Currency>> {
+        return api.getRatesForBase("EUR")
+                .map {
+                    val allCodes = it.rates.keys + "EUR"
+                    if (codes == null) allCodes
+                    else allCodes.filter { codes.contains(it) }
+                }
+                .flatMap {
+                    Observable.concat(it.map { getCurrencyByCode(it).toObservable() })
+                            .toList()
+                }
+    }
+
+    private fun getCurrencyByCode(code: String): Single<Currency> = Single.defer {
+        val cached = currenciesCache[code]
+        if (cached != null) Single.just(cached)
+        else countriesApi.getCountryInfoByCurrencyCode(code)
+                .map { it.first { it.currencies.find { it.code == code } != null } }
+                .map { country ->
+                    val currencyInfo = country.currencies.first { it.code == code }
+                    Currency(
+                            code = code,
+                            name = currencyInfo.name ?: "",
+                            flagUrl = flagUri(country)
+                    )
+                }
+                .doOnSuccess { currenciesCache[code] = it }
+    }
+
+    private fun flagUri(countryInfo: CountryInfo): Uri {
+        val code = countryInfo.alpha2Code.toLowerCase()
+        return Uri.parse("http://www.countryflags.io/$code/flat/64.png")
     }
 
 }

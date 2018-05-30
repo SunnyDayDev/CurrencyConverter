@@ -30,6 +30,9 @@ dependencies {
     deps.shortcut.rx()
     deps.shortcut.dagger(true)
 
+    implementation deps.support.recyclerView
+    implementation deps.dataBinding.lastAdapter
+
     kapt deps.dataBinding.compiler
     
 }
