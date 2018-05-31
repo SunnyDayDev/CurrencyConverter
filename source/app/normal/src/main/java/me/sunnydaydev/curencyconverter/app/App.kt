@@ -1,6 +1,9 @@
 package me.sunnydaydev.curencyconverter.app
 
 import android.app.Application
+import io.reactivex.android.plugins.RxAndroidPlugins
+import io.reactivex.exceptions.UndeliverableException
+import io.reactivex.plugins.RxJavaPlugins
 import me.sunnydaydev.curencyconverter.app.di.AppComponent
 import me.sunnydaydev.curencyconverter.coregeneral.di.ComponentRequirements
 import me.sunnydaydev.curencyconverter.coregeneral.di.RequirementsComponentProvider
@@ -18,7 +21,13 @@ class App: Application(), RequirementsComponentProvider {
 
     override fun onCreate() {
         super.onCreate()
+
         Timber.plant(Timber.DebugTree())
+
+        RxJavaPlugins.setErrorHandler {
+            Timber.e((it as? UndeliverableException)?.cause ?: it)
+        }
+
     }
 
 }

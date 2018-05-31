@@ -47,7 +47,7 @@ ext.versions += [
         java: '2.1.12',
         android: '2.0.2',
         kotlin: '2.2.0',
-        modern: '1.0.6'
+        modern: '1.0.0'
     ],
     utils: [
         inputMask: '3.4.0',

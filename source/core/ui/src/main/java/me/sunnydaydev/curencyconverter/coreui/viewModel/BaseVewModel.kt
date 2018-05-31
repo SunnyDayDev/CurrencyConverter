@@ -2,30 +2,21 @@ package me.sunnydaydev.curencyconverter.coreui.viewModel
 
 import android.arch.lifecycle.LifecycleObserver
 import android.arch.lifecycle.ViewModel
-import android.databinding.BaseObservable
 import android.databinding.Bindable
 import android.databinding.Observable
 import android.databinding.PropertyChangeRegistry
-import io.reactivex.Completable
-import io.reactivex.Flowable
-import io.reactivex.Maybe
-import io.reactivex.Single
-import io.reactivex.disposables.Disposable
-import me.sunnydaydev.curencyconverter.coregeneral.tryOptional
-import me.sunnydaydev.modernrx.CompleteHandler
-import me.sunnydaydev.modernrx.ErrorHandler
-import me.sunnydaydev.modernrx.ModernRxSubscriber
-import me.sunnydaydev.modernrx.ResultHandler
-import kotlin.properties.ReadWriteProperty
+import android.support.annotation.CallSuper
+import me.sunnydaydev.modernrx.*
 
 /**
  * Created by sunny on 28.04.2018.
  * mail: mail@sunnydaydev.me
  */
 
-abstract class BaseVewModel: ViewModel(), LifecycleObserver, Observable {
+abstract class BaseVewModel: ViewModel(), LifecycleObserver, Observable, ModernRx {
 
-    abstract val modernRxHandler: ModernRxSubscriber.Handler
+    private val disposerBag = DisposableBag()
+    final override val modernRxDisposer: ModernRx.Disposer = ModernRx.Disposer(disposerBag)
 
     // region Observable
 
@@ -80,36 +71,10 @@ abstract class BaseVewModel: ViewModel(), LifecycleObserver, Observable {
 
     // endregion Observable
 
-    // region ModernRx
-
-    protected fun Completable.subscribeIt(
-            onError: ErrorHandler? = null,
-            onComplete: CompleteHandler? = null
-    ) : Disposable = modernRxHandler.subscribeIt(this, onError, onComplete)
-
-    protected fun <T> Maybe<T>.subscribeIt(
-            onError: ErrorHandler? = null,
-            onComplete: CompleteHandler? = null,
-            onSuccess: ResultHandler<T>? = null
-    ) : Disposable = modernRxHandler.subscribeIt(this, onError, onComplete, onSuccess)
-
-    protected fun <T> Single<T>.subscribeIt(
-            onError: ErrorHandler? = null,
-            onSuccess: ResultHandler<T>? = null
-    ) : Disposable = modernRxHandler.subscribeIt(this, onError, onSuccess)
-
-    protected fun <T> io.reactivex.Observable<T>.subscribeIt(
-            onError: ErrorHandler? = null,
-            onComplete: CompleteHandler? = null,
-            onNext: ResultHandler<T>? = null
-    ) : Disposable = modernRxHandler.subscribeIt(this, onError, onComplete, onNext)
-
-    protected fun <T> Flowable<T>.subscribeIt(
-            onError: ErrorHandler? = null,
-            onComplete: CompleteHandler? = null,
-            onNext: ResultHandler<T>? = null
-    ) : Disposable = modernRxHandler.subscribeIt(this, onError, onComplete, onNext)
-
-    // endregion
+    @CallSuper
+    override fun onCleared() {
+        super.onCleared()
+        disposerBag.enabled = false
+    }
 
 }

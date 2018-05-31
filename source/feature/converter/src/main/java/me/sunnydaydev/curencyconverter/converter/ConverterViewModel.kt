@@ -4,7 +4,6 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.OnLifecycleEvent
 import android.databinding.Bindable
 import android.databinding.ObservableArrayList
-import io.reactivex.Maybe
 import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.BehaviorSubject
@@ -30,8 +29,7 @@ import javax.inject.Singleton
 internal class ConverterViewModel @Inject constructor(
         private val interactor: ConverterInteractor,
         private val itemViewModelFactory: CurrencyItemViewModel.Factory,
-        private val core: ConverterViewModel.Core,
-        override val modernRxHandler: ModernRxSubscriber.Handler
+        private val core: ConverterViewModel.Core
 ): BaseVewModel() {
 
     @get:Bindable var test by bindable("Loading...")
@@ -109,7 +107,7 @@ internal class ConverterViewModel @Inject constructor(
                 .retryWithDelay(500, TimeUnit.MILLISECONDS)
                 .subscribeIt(
                         onNext = core::setRates,
-                        onError = SuccessErrorHandler(::handleCurrenciesError)
+                        onError = SimpleErrorHandler(true, ::handleCurrenciesError)
                 )
 
     }

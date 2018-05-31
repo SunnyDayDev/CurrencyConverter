@@ -7,7 +7,6 @@ import io.reactivex.rxkotlin.Observables
 import me.sunnydaydev.curencyconverter.coreui.viewModel.BaseVewModel
 import me.sunnydaydev.curencyconverter.coreui.viewModel.bindable
 import me.sunnydaydev.curencyconverter.domain.currencies.Currency
-import me.sunnydaydev.modernrx.ModernRxSubscriber
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
@@ -22,8 +21,7 @@ import javax.inject.Singleton
 internal class CurrencyItemViewModel(
         private val stableIdProvider: StableIdProvider,
         private val currency: Currency,
-        private val core: ConverterViewModel.Core,
-        override val modernRxHandler: ModernRxSubscriber.Handler
+        private val core: ConverterViewModel.Core
 ): BaseVewModel(), StableId {
 
     override val stableId: Long get() = stableIdProvider[currency.code]
@@ -74,20 +72,11 @@ internal class CurrencyItemViewModel(
 
     class Factory @Inject constructor(
             private val stableIdProvider: StableIdProvider,
-            private val core: ConverterViewModel.Core,
-            private val modernRxHandler: ModernRxSubscriber.Handler
+            private val core: ConverterViewModel.Core
     ) {
 
-        fun create(currency: Currency): CurrencyItemViewModel {
-
-            return CurrencyItemViewModel(
-                    stableIdProvider,
-                    currency,
-                    core,
-                    modernRxHandler
-            )
-
-        }
+        fun create(currency: Currency): CurrencyItemViewModel =
+                CurrencyItemViewModel(stableIdProvider, currency, core)
 
     }
 
