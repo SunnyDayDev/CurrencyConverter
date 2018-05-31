@@ -20,9 +20,14 @@ dependencies {
     deps.shortcut.rx()
     deps.shortcut.dagger(false)
 
-    implementation deps.support.appcompat
-
     implementation deps.network.glide
+
+    api deps.support.appcompat
+    api deps.support.recyclerView
+    api deps.dataBinding.lastAdapter
+    api deps.arch.viewModel
+    api deps.arch.runtime
+    implementation deps.arch.extensions
 
     kapt deps.dataBinding.compiler
 

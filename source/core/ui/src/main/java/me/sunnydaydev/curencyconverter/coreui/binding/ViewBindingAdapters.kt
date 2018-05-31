@@ -3,10 +3,7 @@ package me.sunnydaydev.curencyconverter.coreui.binding
 import android.databinding.BindingAdapter
 import android.databinding.InverseBindingAdapter
 import android.databinding.InverseBindingListener
-import android.net.Uri
 import android.view.View
-import android.widget.ImageView
-import com.bumptech.glide.Glide
 
 /**
  * Created by sunny on 30.05.2018.
@@ -16,22 +13,9 @@ import com.bumptech.glide.Glide
 object ViewBindingAdapters {
 
     @JvmStatic
-    @BindingAdapter("imageUrl")
-    fun bindImageUrl(imageView: ImageView, url: String?) {
-        bindImageUrl(imageView, url?.let { Uri.parse(it) })
-    }
-
-    @JvmStatic
-    @BindingAdapter("imageUrl")
-    fun bindImageUrl(imageView: ImageView, url: Uri?) {
-
-        val glide = Glide.with(imageView)
-        glide.clear(imageView)
-
-        url ?: return
-
-        glide.load(url).into(imageView)
-
+    @BindingAdapter("onClick")
+    fun bindOnClick(view: View, onClickListener: OnClickListener) {
+        view.setOnClickListener { onClickListener() }
     }
 
     @JvmStatic
@@ -57,10 +41,27 @@ object ViewBindingAdapters {
                 }
             }
 
-            view.setOnFocusChangeListener { _, _ -> inverse?.onChange() }
+            if (inverse != null) {
+                view.setOnFocusChangeListener { _, _ -> inverse.onChange() }
+            }
 
         }
 
+    }
+
+    @JvmStatic
+    @BindingAdapter(value = ["visible", "goneOnInvisible"], requireAll = false)
+    fun bindVisible(view: View, visible: Boolean?, gone: Boolean?) {
+        visible ?: return
+        view.visibility = when {
+            visible -> View.VISIBLE
+            gone != false -> View.GONE
+            else -> View.INVISIBLE
+        }
+    }
+
+    interface OnClickListener {
+        operator fun invoke()
     }
 
 }

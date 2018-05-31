@@ -23,7 +23,8 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            imageUrl="@{vm.flag}"/>
+            imageUrl="@{vm.flag}"
+            android:contentDescription="@string/prompt_flag_description" />
 
         <android.support.constraint.Guideline
             android:id="@+id/vertical_half_guidline"
@@ -74,17 +75,32 @@
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
-            android:ems="5"
+            android:minWidth="64dp"
             android:inputType="numberDecimal"
             android:text="@={vm.amount}"
             android:hint="@string/prompt_zero"
             android:gravity="end"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            focused="@={vm.focused}"
+            android:importantForAutofill="no"
+            android:focusable="@{vm.focused}"
+            android:focusableInTouchMode="@{vm.focused}"
+            focused="@{vm.focused}"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UnusedAttribute" />
+
+        <View
+            android:id="@+id/preventer"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="@+id/amount"
+            app:layout_constraintEnd_toEndOf="@+id/amount"
+            app:layout_constraintStart_toStartOf="@+id/amount"
+            app:layout_constraintTop_toTopOf="@+id/amount"
+            android:clickable="@{!vm.focused}"
+            android:focusable="@{!vm.focused}"
+            visible="@{!vm.focused}"
+            onClick="@{vm::onClicked}"/>
 
     </android.support.constraint.ConstraintLayout>
 

@@ -21,6 +21,7 @@
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             android:orientation="vertical"
             currency_items="@{vm.currencies}"
+            scrollToPosition="@{vm.scrollToPositionCommand}"
             tools:listitem="@layout/converter_currency_item_layout"/>
 
     </android.support.constraint.ConstraintLayout>

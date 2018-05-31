@@ -74,6 +74,7 @@ abstract class BaseVewModel: ViewModel(), LifecycleObserver, Observable, ModernR
     @CallSuper
     override fun onCleared() {
         super.onCleared()
+        disposerBag.dispose()
         disposerBag.enabled = false
     }
 

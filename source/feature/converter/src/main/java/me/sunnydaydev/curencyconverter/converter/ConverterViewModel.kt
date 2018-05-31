@@ -3,12 +3,14 @@ package me.sunnydaydev.curencyconverter.converter
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.OnLifecycleEvent
 import android.databinding.Bindable
-import android.databinding.ObservableArrayList
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.BehaviorSubject
 import me.sunnydaydev.curencyconverter.coregeneral.rx.defaultSchedulers
 import me.sunnydaydev.curencyconverter.coregeneral.rx.retryWithDelay
+import me.sunnydaydev.curencyconverter.coreui.binding.observable.Command
+import me.sunnydaydev.curencyconverter.coreui.binding.observable.SwapableObservableList
 import me.sunnydaydev.curencyconverter.coreui.viewModel.BaseVewModel
 import me.sunnydaydev.curencyconverter.coreui.viewModel.bindable
 import me.sunnydaydev.curencyconverter.domain.currencies.Currency
@@ -32,13 +34,29 @@ internal class ConverterViewModel @Inject constructor(
         private val core: ConverterViewModel.Core
 ): BaseVewModel() {
 
-    @get:Bindable var test by bindable("Loading...")
+    @get:Bindable var currencies by bindable(SwapableObservableList<CurrencyItemViewModel>())
 
-    @get:Bindable var currencies: MutableList<CurrencyItemViewModel> by bindable(mutableListOf())
+    val scrollToPositionCommand = Command<Int>()
 
     private val startedScopeDisposable = DisposableBag()
 
     private var started = false
+
+    init {
+
+        core.base
+                .distinctUntilChanged()
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeIt { base ->
+                    val baseItem = currencies.find { it.code == base } ?: return@subscribeIt
+                    scrollToPositionCommand.fire(0)
+                    currencies.move(
+                            fromIndex = currencies.indexOf(baseItem),
+                            toIndex = 0
+                    )
+                }
+
+    }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_START)
     fun onViewStart() {
@@ -59,6 +77,11 @@ internal class ConverterViewModel @Inject constructor(
         startedScopeDisposable.dispose()
     }
 
+    override fun onCleared() {
+        super.onCleared()
+        this.currencies.forEach { it.clear() }
+    }
+
     private fun loadCurrencies() {
         interactor.getCurrencies()
                 .defaultSchedulers()
@@ -74,7 +97,7 @@ internal class ConverterViewModel @Inject constructor(
         sorted.add(0, baseCurrency)
 
         this.currencies.forEach { it.clear() }
-        this.currencies = ObservableArrayList<CurrencyItemViewModel>()
+        this.currencies = SwapableObservableList<CurrencyItemViewModel>()
                 .apply { addAll(sorted.map(itemViewModelFactory::create)) }
 
         this.currencies.firstOrNull()?.focused = true
@@ -139,7 +162,7 @@ internal class ConverterViewModel @Inject constructor(
         }
 
         private fun checkedRates(): Observable<Map<String, Double>> {
-            return Observables.combineLatest(baseSubject, ratesSubject)
+            return Observables.combineLatest(base, ratesSubject)
                     .map { (base, rates) ->
                         if (base == rates.base) rates.rates + (base to 1.0)
                         else fallbackRates(base, rates)
