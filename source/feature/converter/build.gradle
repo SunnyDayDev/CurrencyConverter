@@ -31,5 +31,6 @@ dependencies {
     deps.shortcut.dagger(true)
 
     kapt deps.dataBinding.compiler
+    kapt deps.arch.compiler
     
 }

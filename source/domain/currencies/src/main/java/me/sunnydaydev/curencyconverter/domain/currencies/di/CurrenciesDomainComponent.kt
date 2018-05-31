@@ -3,17 +3,17 @@ package me.sunnydaydev.curencyconverter.domain.currencies.di
 import dagger.Binds
 import dagger.Component
 import dagger.Module
-import me.sunnydaydev.curencyconverter.domain.currencies.CurrenciesMapper
-import me.sunnydaydev.curencyconverter.domain.currencies.CurrenciesMapperImpl
 import me.sunnydaydev.curencyconverter.domain.currencies.CurrenciesRepository
 import me.sunnydaydev.curencyconverter.domain.currencies.CurrenciesRepositoryImpl
 import me.sunnydaydev.curencyconverter.domain.currencies.api.di.ApiModule
+import javax.inject.Singleton
 
 /**
  * Created by sunny on 25.05.2018.
  * mail: mail@sunnydaydev.me
  */
 
+@Singleton
 @Component(
         modules = [CurrenciesModule::class]
 )
@@ -42,9 +42,7 @@ interface CurrenciesDomainProvider {
 internal interface CurrenciesModule {
 
     @Binds
-    fun bindCurrenciesMapper(impl: CurrenciesMapperImpl): CurrenciesMapper
-
-    @Binds
+    @Singleton
     fun bindCurrenciesRepository(impl: CurrenciesRepositoryImpl): CurrenciesRepository
 
 }

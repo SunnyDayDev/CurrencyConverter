@@ -5,6 +5,7 @@ import dagger.Module
 import dagger.Provides
 import kotlinx.serialization.json.JSON
 import me.sunnydaydev.curencyconverter.domain.currencies.api.CurrenciesApi
+import me.sunnydaydev.curencyconverter.domain.currencies.api.RestCountriesApi
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -49,6 +50,16 @@ internal class ApiModule {
                 .baseUrl(CurrenciesApi.Urls.HOST)
                 .build()
                 .create(CurrenciesApi::class.java)
+
+    }
+
+    @Provides
+    fun provideRestCountriesApi(retrofit: Retrofit.Builder): RestCountriesApi {
+
+        return retrofit
+                .baseUrl(RestCountriesApi.Urls.HOST)
+                .build()
+                .create(RestCountriesApi::class.java)
 
     }
 

@@ -47,7 +47,11 @@ ext.versions += [
         java: '2.1.12',
         android: '2.0.2',
         kotlin: '2.2.0',
-        modern: '1.0.6'
+        modern: '1.0.0'
+    ],
+    arch: [
+        lifeCycle: '1.1.0',
+        persistence: '1.1.0'
     ],
     utils: [
         inputMask: '3.4.0',
@@ -110,6 +114,12 @@ ext.deps = [
         android: "io.reactivex.rxjava2:rxandroid:$versions.rx.android",
         kotlin: "io.reactivex.rxjava2:rxkotlin:$versions.rx.kotlin",
         modern: "com.github.SunnyDayDev:ModernRx:$versions.rx.modern@aar"
+    ],
+    arch: [
+        runtime: "android.arch.lifecycle:runtime:$versions.arch.lifeCycle",
+        viewModel: "android.arch.lifecycle:viewmodel:$versions.arch.lifeCycle",
+        compiler: "android.arch.lifecycle:compiler:$versions.arch.lifeCycle",
+        extensions: "android.arch.lifecycle:extensions:$versions.arch.lifeCycle"
     ],
     network: [
         gson: "com.google.code.gson:gson:$versions.network.gson",

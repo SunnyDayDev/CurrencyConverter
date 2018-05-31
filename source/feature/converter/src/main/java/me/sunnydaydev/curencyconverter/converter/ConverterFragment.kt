@@ -1,5 +1,6 @@
 package me.sunnydaydev.curencyconverter.converter
 
+import android.arch.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import me.sunnydaydev.curencyconverter.coregeneral.di.RequirementsComponentProvi
 import me.sunnydaydev.curencyconverter.coreui.MVVMFragment
 import me.sunnydaydev.curencyconverter.coreui.util.inflateBinding
 import me.sunnydaydev.curencyconverter.coreui.viewModel.BaseVewModel
+import me.sunnydaydev.curencyconverter.coreui.viewModel.get
 import javax.inject.Inject
 
 /**
@@ -24,7 +26,10 @@ class ConverterFragment: MVVMFragment<ConverterFragmentBinding>() {
 
     override val viewModelVariableId = BR.vm
 
-    override val vm: BaseVewModel by lazy { injection.vm }
+    override val viewModelFactory: ViewModelProvider.Factory by lazy { injection.vm }
+
+    override fun getViewModel(provider: ViewModelProvider): BaseVewModel =
+            provider[ConverterViewModel::class]
 
     override fun inject(provider: RequirementsComponentProvider) {
         ConverterComponent.Initializer.init(provider.getComponentRequirements())

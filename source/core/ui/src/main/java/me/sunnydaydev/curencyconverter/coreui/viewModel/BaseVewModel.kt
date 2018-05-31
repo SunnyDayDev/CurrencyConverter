@@ -5,18 +5,18 @@ import android.arch.lifecycle.ViewModel
 import android.databinding.Bindable
 import android.databinding.Observable
 import android.databinding.PropertyChangeRegistry
-import me.sunnydaydev.curencyconverter.coregeneral.tryOptional
-import me.sunnydaydev.modernrx.ModernRxSubscriber
-import kotlin.properties.ReadWriteProperty
+import android.support.annotation.CallSuper
+import me.sunnydaydev.modernrx.*
 
 /**
  * Created by sunny on 28.04.2018.
  * mail: mail@sunnydaydev.me
  */
 
-open class BaseVewModel(
-        override val modernRxHandler: ModernRxSubscriber.Handler
-): ViewModel(), LifecycleObserver, Observable, ModernRxSubscriber {
+abstract class BaseVewModel: ViewModel(), LifecycleObserver, Observable, ModernRx {
+
+    private val disposerBag = DisposableBag()
+    final override val modernRxDisposer: ModernRx.Disposer = ModernRx.Disposer(disposerBag)
 
     // region Observable
 
@@ -70,5 +70,12 @@ open class BaseVewModel(
     }
 
     // endregion Observable
+
+    @CallSuper
+    override fun onCleared() {
+        super.onCleared()
+        disposerBag.dispose()
+        disposerBag.enabled = false
+    }
 
 }

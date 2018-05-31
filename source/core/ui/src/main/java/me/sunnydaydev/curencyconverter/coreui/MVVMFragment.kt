@@ -1,5 +1,7 @@
 package me.sunnydaydev.curencyconverter.coreui
 
+import android.arch.lifecycle.ViewModelProvider
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Context
 import android.databinding.ViewDataBinding
 import android.os.Bundle
@@ -20,7 +22,8 @@ abstract class MVVMFragment<Binding: ViewDataBinding>: Fragment()  {
     // region Abstract
 
     protected abstract val viewModelVariableId: Int
-    protected abstract val vm: BaseVewModel
+
+    protected abstract val viewModelFactory: ViewModelProvider.Factory
 
     protected abstract fun inject(provider: RequirementsComponentProvider)
 
@@ -28,10 +31,15 @@ abstract class MVVMFragment<Binding: ViewDataBinding>: Fragment()  {
                                            container: ViewGroup?,
                                            savedInstanceState: Bundle?): Binding
 
+    protected abstract fun getViewModel(provider: ViewModelProvider): BaseVewModel
+
     // endregion
+
+    protected lateinit var vm: BaseVewModel
 
     @Suppress("MemberVisibilityCanBePrivate")
     protected var binding: Binding? = null
+
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -40,6 +48,7 @@ abstract class MVVMFragment<Binding: ViewDataBinding>: Fragment()  {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        vm = getViewModel(ViewModelProviders.of(this, viewModelFactory))
         lifecycle.addObserver(vm)
     }
 
