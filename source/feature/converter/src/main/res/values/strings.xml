@@ -2,4 +2,7 @@
 <resources>
     <string name="prompt_zero">0.0</string>
     <string name="prompt_flag_description">Currency\'s country flag.</string>
+    <string name="prompt_currencies_loading">Currencies loading...</string>
+    <string name="prompt_error_happen">Ops! Error happen...</string>
+    <string name="prompt_retry">Retry</string>
 </resources>

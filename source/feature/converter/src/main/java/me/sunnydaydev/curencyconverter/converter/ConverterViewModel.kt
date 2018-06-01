@@ -10,6 +10,7 @@ import io.reactivex.subjects.BehaviorSubject
 import me.sunnydaydev.curencyconverter.coregeneral.rx.defaultSchedulers
 import me.sunnydaydev.curencyconverter.coregeneral.rx.retryWithDelay
 import me.sunnydaydev.curencyconverter.coreui.viewModel.BaseVewModel
+import me.sunnydaydev.curencyconverter.coreui.viewModel.ViewModelState
 import me.sunnydaydev.curencyconverter.domain.currencies.Currency
 import me.sunnydaydev.curencyconverter.domain.currencies.CurrencyRates
 import me.sunnydaydev.modernrx.*
@@ -35,6 +36,8 @@ internal class ConverterViewModel @Inject constructor(
 ): BaseVewModel() {
 
     @get:Bindable var currencies by bindable(SwapableObservableList<CurrencyItemViewModel>())
+
+    @get:Bindable var state by bindable(ViewModelState.LOADING)
 
     val scrollToPositionCommand = Command<Int>()
 
@@ -77,15 +80,28 @@ internal class ConverterViewModel @Inject constructor(
         startedScopeDisposable.dispose()
     }
 
+    fun onRetryClicked() {
+        loadCurrencies()
+    }
+
     override fun onCleared() {
         super.onCleared()
         this.currencies.forEach { it.clear() }
     }
 
     private fun loadCurrencies() {
+
+        state = ViewModelState.LOADING
+
         interactor.getCurrencies()
                 .defaultSchedulers()
-                .subscribeIt(onSuccess = ::handleCurrencies)
+                .subscribeIt(
+                        onSuccess = ::handleCurrencies,
+                        onError = SimpleErrorHandler(false) {
+                            state = ViewModelState.ERROR
+                        }
+                )
+
     }
 
     private fun handleCurrencies(currencies: List<Currency>) {
@@ -105,6 +121,8 @@ internal class ConverterViewModel @Inject constructor(
         core.setBase(baseCurrency.code, 1.0)
 
         startCheckRates()
+
+        state = ViewModelState.CONTENT
 
     }
 
