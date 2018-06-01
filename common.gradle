@@ -57,7 +57,10 @@ ext.versions += [
         inputMask: '3.4.0',
         trayPrefs: '0.12.0',
         cicerone: '3.0.0',
-        mvvmkit: 'd0658bbb32'
+        mvvmkit: 'e286dfa8b8'
+    ],
+    view: [
+        circularImageView: '3.0.2'
     ],
     debug: [
          crashlytics: '2.9.2',
@@ -142,6 +145,9 @@ ext.deps = [
         prefs: "net.grandcentrix.tray:tray:$versions.utils.trayPrefs",
         cicerone: "ru.terrakok.cicerone:cicerone:$versions.utils.cicerone",
         mvvmkit: "me.sunnydaydev:mvvmkit:$versions.utils.mvvmkit@aar"
+    ],
+    view: [
+        circularImageView: "com.mikhaellopez:circularimageview:$versions.view.circularImageView"
     ],
     plugins: [
         versions: "com.github.ben-manes:gradle-versions-plugin:$versions.plugins.versions"

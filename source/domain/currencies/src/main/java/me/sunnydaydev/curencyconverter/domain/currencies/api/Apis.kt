@@ -21,6 +21,8 @@ internal interface CurrenciesApi {
 
 }
 
+// TODO: Move it to own API
+
 internal interface RestCountriesApi {
 
     object Urls {

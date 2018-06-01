@@ -16,6 +16,8 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
  * mail: mail@sunnydaydev.me
  */
 
+// TODO: Create and replace to :domain_networking module
+
 @Module
 internal class ApiModule {
 

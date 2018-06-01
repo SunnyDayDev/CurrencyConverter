@@ -6,7 +6,6 @@ import io.reactivex.Single
 import me.sunnydaydev.curencyconverter.domain.currencies.api.CountryInfo
 import me.sunnydaydev.curencyconverter.domain.currencies.api.CurrenciesApi
 import me.sunnydaydev.curencyconverter.domain.currencies.api.RestCountriesApi
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -26,6 +25,10 @@ internal class CurrenciesRepositoryImpl @Inject constructor(
         private val api: CurrenciesApi,
         private val countriesApi: RestCountriesApi
 ): CurrenciesRepository {
+
+    companion object {
+        private val skipCountries = setOf("BV", "AQ")
+    }
 
     private val currenciesCache = mutableMapOf<String, Currency>()
 
@@ -55,7 +58,13 @@ internal class CurrenciesRepositoryImpl @Inject constructor(
         val cached = currenciesCache[code]
         if (cached != null) Single.just(cached)
         else countriesApi.getCountryInfoByCurrencyCode(code)
-                .map { it.first { it.currencies.find { it.code == code } != null } }
+                .map {
+                    it.first {
+                        !skipCountries.contains(it.alpha2Code) &&
+                                it.currencies.find { it.code == code } != null
+
+                    }
+                }
                 .map { country ->
                     val currencyInfo = country.currencies.first { it.code == code }
                     Currency(
