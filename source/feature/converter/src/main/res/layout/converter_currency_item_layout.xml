@@ -4,27 +4,36 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
+        <import type="me.sunnydaydev.curencyconverter.converter.ConverterBindings"/>
+
         <variable
             name="vm"
             type="me.sunnydaydev.curencyconverter.converter.CurrencyItemViewModel"/>
+
     </data>
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/flag"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            imageUrl="@{vm.flag}"
+            imageUrlTransformation="@{ConverterBindings.flagTransformation}"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:background="@color/palette_white"
+            android:contentDescription="@string/prompt_flag_description"
+            app:civ_border_color="@color/flag_icon_border"
+            app:civ_border_width="1dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            imageUrl="@{vm.flag}"
-            android:contentDescription="@string/prompt_flag_description" />
+            tools:background="@drawable/round_preview" />
 
         <android.support.constraint.Guideline
             android:id="@+id/vertical_half_guidline"
@@ -39,13 +48,9 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
             android:text="@{vm.code}"
-            android:textColor="@color/text_major"
-            android:textSize="18sp"
-            android:textStyle="bold"
+            android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
             app:layout_constraintBottom_toTopOf="@+id/vertical_half_guidline"
-            app:layout_constraintEnd_toStartOf="@+id/amount"
             app:layout_constraintStart_toEndOf="@+id/flag"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="1.0"
@@ -56,51 +61,69 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:text="@{vm.description}"
-            android:textColor="@color/text_minor"
+            android:textAppearance="@style/TextAppearance.AppCompat.Small"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/amount"
             app:layout_constraintStart_toEndOf="@+id/flag"
             app:layout_constraintTop_toTopOf="@+id/vertical_half_guidline"
             app:layout_constraintVertical_bias="0.0"
             tools:text="Russian rubble" />
 
-        <EditText
-            android:id="@+id/amount"
-            android:layout_width="wrap_content"
+        <RelativeLayout
+            android:id="@+id/amountWrapper"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:minWidth="64dp"
-            android:inputType="numberDecimal"
-            android:text="@={vm.amount}"
-            android:hint="@string/prompt_zero"
-            android:gravity="end"
-            android:importantForAutofill="no"
-            android:focusable="@{vm.focused}"
-            android:focusableInTouchMode="@{vm.focused}"
-            focused="@{vm.focused}"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1"
+            app:layout_constraintStart_toEndOf="@+id/textsBarier"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="UnusedAttribute" />
+            tools:ignore="UnusedAttribute"
+            tools:text="10.03">
 
-        <View
-            android:id="@+id/preventer"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintBottom_toBottomOf="@+id/amount"
-            app:layout_constraintEnd_toEndOf="@+id/amount"
-            app:layout_constraintStart_toStartOf="@+id/amount"
-            app:layout_constraintTop_toTopOf="@+id/amount"
-            android:clickable="@{!vm.focused}"
-            android:focusable="@{!vm.focused}"
-            visible="@{!vm.focused}"
-            onClick="@{vm::onClicked}"/>
+            <EditText
+                android:id="@+id/amount"
+                focused="@{vm.focused}"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:focusable="@{vm.focused}"
+                android:focusableInTouchMode="@{vm.focused}"
+                android:gravity="end"
+                android:hint="@string/prompt_zero"
+                android:importantForAutofill="no"
+                android:inputType="numberDecimal"
+                android:minWidth="64dp"
+                android:text="@={vm.amount}"
+                tools:ignore="UnusedAttribute"
+                tools:text="10.03" />
+
+            <View
+                android:id="@+id/preventer"
+                onClick="@{vm::onClicked}"
+                visible="@{!vm.focused}"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:clickable="@{!vm.focused}"
+                android:focusable="@{!vm.focused}"
+                android:layout_alignTop="@id/amount"
+                android:layout_alignBottom="@id/amount"
+                android:layout_alignEnd="@id/amount"
+                android:layout_alignStart="@id/amount"/>
+
+        </RelativeLayout>
+
+        <android.support.constraint.Barrier
+            android:id="@+id/textsBarier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="end"
+            app:constraint_referenced_ids="code,name"/>
 
     </android.support.constraint.ConstraintLayout>
 

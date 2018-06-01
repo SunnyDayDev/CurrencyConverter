@@ -6,7 +6,6 @@ import io.reactivex.Single
 import me.sunnydaydev.curencyconverter.domain.currencies.api.CountryInfo
 import me.sunnydaydev.curencyconverter.domain.currencies.api.CurrenciesApi
 import me.sunnydaydev.curencyconverter.domain.currencies.api.RestCountriesApi
-import java.util.*
 import javax.inject.Inject
 
 /**
@@ -26,6 +25,19 @@ internal class CurrenciesRepositoryImpl @Inject constructor(
         private val api: CurrenciesApi,
         private val countriesApi: RestCountriesApi
 ): CurrenciesRepository {
+
+    // TODO: Remove when will be at own api
+    /**
+     * Flag mapping helpers.
+     */
+    companion object {
+        private val hardcodedMap = mapOf(
+                "USD" to "US",
+                "EUR" to "EU",
+                "AUD" to "AU",
+                "NOK" to "NO"
+        )
+    }
 
     private val currenciesCache = mutableMapOf<String, Currency>()
 
@@ -55,20 +67,22 @@ internal class CurrenciesRepositoryImpl @Inject constructor(
         val cached = currenciesCache[code]
         if (cached != null) Single.just(cached)
         else countriesApi.getCountryInfoByCurrencyCode(code)
-                .map { it.first { it.currencies.find { it.code == code } != null } }
+                .map {
+                    it.first { it.currencies.find { it.code == code } != null }
+                }
                 .map { country ->
                     val currencyInfo = country.currencies.first { it.code == code }
                     Currency(
                             code = code,
                             name = currencyInfo.name ?: "",
-                            flagUrl = flagUri(country)
+                            flagUrl = flagUri(code, country)
                     )
                 }
                 .doOnSuccess { currenciesCache[code] = it }
     }
 
-    private fun flagUri(countryInfo: CountryInfo): Uri {
-        val code = countryInfo.alpha2Code.toLowerCase()
+    private fun flagUri(currencyCode: String, countryInfo: CountryInfo): Uri {
+        val code = hardcodedMap[currencyCode] ?: countryInfo.alpha2Code.toLowerCase()
         return Uri.parse("http://www.countryflags.io/$code/flat/64.png")
     }
 

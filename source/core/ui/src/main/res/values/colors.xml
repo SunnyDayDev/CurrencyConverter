@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <color name="palette_white">#fff</color>
+    <color name="palette_black">#000</color>
+    <color name="palette_red">#cf0000</color>
+
     <color name="text_major">#f30a0a0a</color>
     <color name="text_minor">#f5464646</color>
 

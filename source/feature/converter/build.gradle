@@ -30,6 +30,9 @@ dependencies {
     deps.shortcut.rx()
     deps.shortcut.dagger(true)
 
+    implementation deps.view.circularImageView
+    implementation deps.network.glide
+
     kapt deps.dataBinding.compiler
     kapt deps.arch.compiler
     

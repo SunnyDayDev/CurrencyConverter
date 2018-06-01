@@ -6,6 +6,8 @@
 
     <data>
 
+        <import type="me.sunnydaydev.curencyconverter.coreui.viewModel.ViewModelState"/>
+
         <variable
             name="bindings"
             type="me.sunnydaydev.curencyconverter.converter.ConverterBindings"/>
@@ -21,15 +23,123 @@
         android:layout_height="match_parent"
         tools:context=".ConverterActivity">
 
-        <android.support.v7.widget.RecyclerView
+        <LinearLayout
+            android:id="@+id/connectionLost"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:background="@color/palette_red"
+            android:padding="16dp"
+            android:gravity="center"
+            visible="@{vm.connectionLost}">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/palette_white"
+                android:text="@string/prompt_connection_lost_error"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/palette_white"
+                android:text="@{@string/prompt_connection_lost_time(vm.connectionLostTime)}"
+                tools:text="@string/prompt_connection_lost_time"/>
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
             recyclerView_items="@{vm.currencies}"
             recyclerView_itemsLayoutMap="@{bindings.currencyItemsMap}"
             scrollToPosition="@{vm.scrollToPositionCommand}"
-            tools:listitem="@layout/converter_currency_item_layout"/>
+            visible="@{vm.state == ViewModelState.CONTENT}"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="vertical"
+            app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+            app:layout_constraintTop_toBottomOf="@+id/connectionLost"
+            tools:listitem="@layout/converter_currency_item_layout" />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/progress"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            visible="@{vm.state == ViewModelState.LOADING}"
+            tools:visibility="gone">
+
+            <ProgressBar
+                android:id="@+id/progressbar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:indeterminate="true"
+                app:layout_constraintBottom_toTopOf="@+id/progress_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <TextView
+                android:id="@+id/progress_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/prompt_currencies_loading"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/progressbar" />
+
+        </android.support.constraint.ConstraintLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/error"
+            visible="@{vm.state == ViewModelState.ERROR}"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:visibility="gone">
+
+            <TextView
+                android:id="@+id/error_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="@string/prompt_error_happen"
+                app:layout_constraintBottom_toTopOf="@+id/error_retry_button"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed" />
+
+            <Button
+                android:id="@+id/error_retry_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:text="@string/prompt_retry"
+                android:textColor="@color/palette_white"
+                onClick="@{vm::onRetryClicked}"
+                app:backgroundTint="@color/colorPrimary"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/error_text" />
+
+        </android.support.constraint.ConstraintLayout>
 
     </android.support.constraint.ConstraintLayout>
 
