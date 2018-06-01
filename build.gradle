@@ -31,6 +31,22 @@ allprojects {
 
 }
 
+subprojects {
+
+    project.configurations.all {
+
+        resolutionStrategy.eachDependency { details ->
+
+            if (details.requested.group == 'android.arch.lifecycle' ) {
+                details.useVersion versions.arch.lifeCycle
+            }
+
+        }
+
+    }
+
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }

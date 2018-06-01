@@ -9,13 +9,13 @@ import io.reactivex.rxkotlin.Observables
 import io.reactivex.subjects.BehaviorSubject
 import me.sunnydaydev.curencyconverter.coregeneral.rx.defaultSchedulers
 import me.sunnydaydev.curencyconverter.coregeneral.rx.retryWithDelay
-import me.sunnydaydev.curencyconverter.coreui.binding.observable.Command
-import me.sunnydaydev.curencyconverter.coreui.binding.observable.SwapableObservableList
 import me.sunnydaydev.curencyconverter.coreui.viewModel.BaseVewModel
-import me.sunnydaydev.curencyconverter.coreui.viewModel.bindable
 import me.sunnydaydev.curencyconverter.domain.currencies.Currency
 import me.sunnydaydev.curencyconverter.domain.currencies.CurrencyRates
 import me.sunnydaydev.modernrx.*
+import me.sunnydaydev.mvvmkit.observable.Command
+import me.sunnydaydev.mvvmkit.observable.SwapableObservableList
+import me.sunnydaydev.mvvmkit.observable.bindable
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton

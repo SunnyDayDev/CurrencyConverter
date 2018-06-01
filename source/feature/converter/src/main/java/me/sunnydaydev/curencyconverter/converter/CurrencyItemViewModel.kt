@@ -6,13 +6,11 @@ import io.reactivex.Observable
 import io.reactivex.rxkotlin.Observables
 import me.sunnydaydev.curencyconverter.coregeneral.tryOptional
 import me.sunnydaydev.curencyconverter.coreui.viewModel.BaseVewModel
-import me.sunnydaydev.curencyconverter.coreui.viewModel.bindable
 import me.sunnydaydev.curencyconverter.domain.currencies.Currency
 import me.sunnydaydev.modernrx.OptionalDisposable
 import me.sunnydaydev.modernrx.disposeBy
-import timber.log.Timber
+import me.sunnydaydev.mvvmkit.observable.bindable
 import java.text.DecimalFormat
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 

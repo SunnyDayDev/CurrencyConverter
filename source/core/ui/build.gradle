@@ -27,6 +27,7 @@ dependencies {
     api deps.dataBinding.lastAdapter
     api deps.arch.viewModel
     api deps.arch.runtime
+    api deps.utils.mvvmkit
     implementation deps.arch.extensions
 
     kapt deps.dataBinding.compiler
