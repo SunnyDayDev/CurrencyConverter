@@ -5,9 +5,15 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <variable
+            name="bindings"
+            type="me.sunnydaydev.curencyconverter.converter.ConverterBindings"/>
+
         <variable
             name="vm"
             type="me.sunnydaydev.curencyconverter.converter.ConverterViewModel"/>
+
     </data>
 
     <android.support.constraint.ConstraintLayout
@@ -20,7 +26,8 @@
             android:layout_height="match_parent"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager"
             android:orientation="vertical"
-            currency_items="@{vm.currencies}"
+            recyclerView_items="@{vm.currencies}"
+            recyclerView_itemsLayoutMap="@{bindings.currencyItemsMap}"
             scrollToPosition="@{vm.scrollToPositionCommand}"
             tools:listitem="@layout/converter_currency_item_layout"/>
 

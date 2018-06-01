@@ -1,14 +1,18 @@
 package me.sunnydaydev.curencyconverter.converter.di
 
+import android.arch.lifecycle.ViewModel
+import dagger.Binds
 import dagger.Component
 import dagger.Module
+import dagger.multibindings.IntoMap
 import me.sunnydaydev.curencyconverter.converter.ConverterFragment
 import me.sunnydaydev.curencyconverter.converter.ConverterViewModel
 import me.sunnydaydev.curencyconverter.coregeneral.di.ComponentRequirements
 import me.sunnydaydev.curencyconverter.coregeneral.di.CoreProvider
 import me.sunnydaydev.curencyconverter.coreui.di.Injector
-import me.sunnydaydev.curencyconverter.coreui.viewModel.SingleViewModelFactory
 import me.sunnydaydev.curencyconverter.domain.currencies.di.CurrenciesDomainProvider
+import me.sunnydaydev.mvvmkit.viewModel.InjectableViewModelFactory
+import me.sunnydaydev.mvvmkit.viewModel.ViewModelKey
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -41,8 +45,15 @@ interface ConverterComponent: Injector<ConverterFragment> {
 }
 
 @Module
-internal interface ConverterBindModule
+internal interface ConverterBindModule {
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(ConverterViewModel::class)
+    fun bindViewModel(vm: ConverterViewModel): ViewModel
+
+}
 
 internal class Injection @Inject constructor(
-        val vm: SingleViewModelFactory<ConverterViewModel>
+        val vmFactory: InjectableViewModelFactory
 )

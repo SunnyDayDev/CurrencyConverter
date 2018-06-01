@@ -8,10 +8,10 @@ import me.sunnydaydev.curencyconverter.converter.databinding.ConverterFragmentBi
 import me.sunnydaydev.curencyconverter.converter.di.ConverterComponent
 import me.sunnydaydev.curencyconverter.converter.di.Injection
 import me.sunnydaydev.curencyconverter.coregeneral.di.RequirementsComponentProvider
-import me.sunnydaydev.curencyconverter.coreui.MVVMFragment
-import me.sunnydaydev.curencyconverter.coreui.util.inflateBinding
+import me.sunnydaydev.curencyconverter.coreui.InjectableMVVMFragment
 import me.sunnydaydev.curencyconverter.coreui.viewModel.BaseVewModel
-import me.sunnydaydev.curencyconverter.coreui.viewModel.get
+import me.sunnydaydev.mvvmkit.util.inflateBinding
+import me.sunnydaydev.mvvmkit.viewModel.get
 import javax.inject.Inject
 
 /**
@@ -19,14 +19,14 @@ import javax.inject.Inject
  * mail: mail@sunnydaydev.me
  */
 
-class ConverterFragment: MVVMFragment<ConverterFragmentBinding>() {
+class ConverterFragment: InjectableMVVMFragment<ConverterFragmentBinding>() {
 
     @Inject
     internal lateinit var injection: Injection
 
     override val viewModelVariableId = BR.vm
 
-    override val viewModelFactory: ViewModelProvider.Factory by lazy { injection.vm }
+    override val viewModelFactory: ViewModelProvider.Factory by lazy { injection.vmFactory }
 
     override fun getViewModel(provider: ViewModelProvider): BaseVewModel =
             provider[ConverterViewModel::class]
@@ -38,7 +38,7 @@ class ConverterFragment: MVVMFragment<ConverterFragmentBinding>() {
 
     override fun onCreateBinding(
             inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): ConverterFragmentBinding = inflater.inflateBinding(R.layout.converter_fragment, container)
-
+    ) = inflater.inflateBinding<ConverterFragmentBinding>(R.layout.converter_fragment, container)
+            .also { it.bindings = ConverterBindings() }
 
 }

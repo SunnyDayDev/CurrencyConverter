@@ -50,13 +50,14 @@ ext.versions += [
         modern: '1.0.0'
     ],
     arch: [
-        lifeCycle: '1.1.0',
+        lifeCycle: '1.1.1',
         persistence: '1.1.0'
     ],
     utils: [
         inputMask: '3.4.0',
         trayPrefs: '0.12.0',
-        cicerone: '3.0.0'
+        cicerone: '3.0.0',
+        mvvmkit: 'd0658bbb32'
     ],
     debug: [
          crashlytics: '2.9.2',
@@ -139,7 +140,8 @@ ext.deps = [
     utils: [
         inputMask: "com.redmadrobot:inputmask:$versions.utils.inputMask",
         prefs: "net.grandcentrix.tray:tray:$versions.utils.trayPrefs",
-        cicerone: "ru.terrakok.cicerone:cicerone:$versions.utils.cicerone"
+        cicerone: "ru.terrakok.cicerone:cicerone:$versions.utils.cicerone",
+        mvvmkit: "me.sunnydaydev:mvvmkit:$versions.utils.mvvmkit@aar"
     ],
     plugins: [
         versions: "com.github.ben-manes:gradle-versions-plugin:$versions.plugins.versions"
