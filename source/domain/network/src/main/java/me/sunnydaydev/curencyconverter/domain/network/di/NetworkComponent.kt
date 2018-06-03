@@ -1,25 +1,47 @@
-package me.sunnydaydev.curencyconverter.domain.currencies.api.di
+package me.sunnydaydev.curencyconverter.domain.network.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.stringBased
+import dagger.Binds
+import dagger.Component
 import dagger.Module
 import dagger.Provides
 import kotlinx.serialization.json.JSON
-import me.sunnydaydev.curencyconverter.domain.currencies.api.CurrenciesApi
-import me.sunnydaydev.curencyconverter.domain.currencies.api.RestCountriesApi
+import me.sunnydaydev.curencyconverter.domain.network.CurrenciesApi
+import me.sunnydaydev.curencyconverter.domain.network.CurrenciesNetworkService
+import me.sunnydaydev.curencyconverter.domain.network.CurrenciesNetworkServiceImpl
 import okhttp3.MediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 
 /**
- * Created by sunny on 25.05.2018.
+ * Created by sunny on 03.06.2018.
  * mail: mail@sunnydaydev.me
  */
 
-// TODO: Create and replace to :domain_networking module
+interface NetworkServicesProvider {
+
+    val currenciesNetworkService: CurrenciesNetworkService
+
+}
+
+@Component(modules = [NetworkModule::class, NetworkServicesModule::class])
+interface NetworkComponent: NetworkServicesProvider {
+
+    object Initializer {
+
+        fun init(): NetworkComponent {
+            return DaggerNetworkComponent.builder()
+                    .build()
+        }
+
+    }
+
+}
+
 
 @Module
-internal class ApiModule {
+internal class NetworkModule {
 
     @Provides
     fun providesOkHttp(): OkHttpClient {
@@ -55,14 +77,12 @@ internal class ApiModule {
 
     }
 
-    @Provides
-    fun provideRestCountriesApi(retrofit: Retrofit.Builder): RestCountriesApi {
+}
 
-        return retrofit
-                .baseUrl(RestCountriesApi.Urls.HOST)
-                .build()
-                .create(RestCountriesApi::class.java)
+@Module
+internal interface NetworkServicesModule {
 
-    }
+    @Binds
+    fun bindCurrenciesNetworkService(impl: CurrenciesNetworkServiceImpl): CurrenciesNetworkService
 
 }

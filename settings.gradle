@@ -21,6 +21,10 @@ project(':core_ui').projectDir = new File('source/core/ui')
 
 // region Domain
 
+
+include ':domain_network'
+project(':domain_network').projectDir = new File('source/domain/network')
+
 include ':domain_currencies'
 project(':domain_currencies').projectDir = new File('source/domain/currencies')
 

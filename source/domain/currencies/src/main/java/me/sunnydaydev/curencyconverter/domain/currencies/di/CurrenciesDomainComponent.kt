@@ -5,7 +5,7 @@ import dagger.Component
 import dagger.Module
 import me.sunnydaydev.curencyconverter.domain.currencies.CurrenciesRepository
 import me.sunnydaydev.curencyconverter.domain.currencies.CurrenciesRepositoryImpl
-import me.sunnydaydev.curencyconverter.domain.currencies.api.di.ApiModule
+import me.sunnydaydev.curencyconverter.domain.network.di.NetworkServicesProvider
 import javax.inject.Singleton
 
 /**
@@ -15,16 +15,18 @@ import javax.inject.Singleton
 
 @Singleton
 @Component(
-        modules = [CurrenciesModule::class]
+        modules = [CurrenciesModule::class],
+        dependencies = [NetworkServicesProvider::class]
 )
 interface CurrenciesDomainComponent: CurrenciesDomainProvider {
 
     object Initializer {
 
-        fun init(): CurrenciesDomainComponent {
+        fun init(network: NetworkServicesProvider): CurrenciesDomainComponent {
 
            return DaggerCurrenciesDomainComponent.builder()
-                    .build()
+                   .networkServicesProvider(network)
+                   .build()
 
         }
 
@@ -38,7 +40,7 @@ interface CurrenciesDomainProvider {
 
 }
 
-@Module(includes = [ApiModule::class])
+@Module
 internal interface CurrenciesModule {
 
     @Binds
