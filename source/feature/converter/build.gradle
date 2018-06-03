@@ -4,13 +4,25 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
+defaultAndroidModule()
+
 android {
 
-    defaultAndroid()
+    baseFeature false
+    dataBinding.enabled = true
 
 }
 
 dependencies {
+
+    application project(':app_normal')
+
+    implementation project(':core')
+    implementation project(':core_ui')
+
+    implementation project(':domain_currencies')
+
+    implementation project(':feature_base')
 
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -18,6 +30,10 @@ dependencies {
     deps.shortcut.rx()
     deps.shortcut.dagger(true)
 
-    implementation project(':feature_base')
+    implementation deps.view.circularImageView
+    implementation deps.network.glide
+
+    kapt deps.dataBinding.compiler
+    kapt deps.arch.compiler
     
 }

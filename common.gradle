@@ -5,17 +5,19 @@ ext.versions = [
     minSdk: 17,
     buildTools: '27.0.3',
     core: [
-        androidPlugin: '3.2.0-alpha15',
+        androidPlugin: '3.2.0-alpha16',
         googleServicesPlugin: '3.2.1',
-        kotlin: '1.2.41',
-        serialization: '0.5.0',
-        reflectLite: '1.0.0',
         dagger: '2.16'
     ]
 ]
 
 // Additional versions which may reference to core versions
 ext.versions += [
+    kotlin: [
+        kotlin: '1.2.41',
+        serialization: '0.5.0',
+        reflectLite: '1.0.0',
+    ],
     support: [
         support: '27.1.1',
         constraint: '1.1.0',
@@ -45,12 +47,20 @@ ext.versions += [
         java: '2.1.12',
         android: '2.0.2',
         kotlin: '2.2.0',
-        modern: '1.0.6'
+        modern: '1.0.0'
+    ],
+    arch: [
+        lifeCycle: '1.1.1',
+        persistence: '1.1.0'
     ],
     utils: [
         inputMask: '3.4.0',
         trayPrefs: '0.12.0',
-        cicerone: '3.0.0'
+        cicerone: '3.0.0',
+        mvvmkit: 'e286dfa8b8'
+    ],
+    view: [
+        circularImageView: '3.0.2'
     ],
     debug: [
          crashlytics: '2.9.2',
@@ -66,15 +76,6 @@ ext.deps = [
         // Android
         androidPlugin: "com.android.tools.build:gradle:$versions.core.androidPlugin",
         googleServicesPlugin: "com.google.gms:google-services:$versions.core.googleServicesPlugin",
-            
-        // Kotlin
-        kotlinStdlib: "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.core.kotlin",
-        kotlinSerializationRuntime: "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$versions.core.kotlinSerialization",
-        kotlinReflect: "org.jetbrains.kotlin:kotlin-reflect:$versions.core.kotlin",
-        kotlinReflectLite: "org.jetbrains.kotlinx:kotlinx.reflect.lite:$versions.core.kotlinReflectLite",
-        kotlinPlugin: "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.core.kotlin",
-        kotlinExtensionsPlugin: "org.jetbrains.kotlin:kotlin-android-extensions:$versions.core.kotlin",
-        kotlinSerializationPlugin:  "org.jetbrains.kotlinx:kotlinx-gradle-serialization-plugin:$versions.core.kotlinSerialization",
         
         // Dagger
         dagger: "com.google.dagger:dagger:$versions.core.dagger",
@@ -82,6 +83,15 @@ ext.deps = [
         daggerAndroidSupport: "com.google.dagger:dagger-android-support:$versions.core.dagger",
         daggerAndroidProcessor: "com.google.dagger:dagger-android-processor:$versions.core.dagger",
         daggerCompiler: "com.google.dagger:dagger-compiler:$versions.core.dagger",
+    ],
+    kotlin: [
+        stdlib: "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$versions.kotlin.kotlin",
+        serializationRuntime: "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$versions.kotlin.serialization",
+        reflect: "org.jetbrains.kotlin:kotlin-reflect:$versions.kotlin.kotlin",
+        reflectLite: "org.jetbrains.kotlinx:kotlinx.reflect.lite:$versions.kotlin.reflectLite",
+        plugin: "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin.kotlin",
+        extensionsPlugin: "org.jetbrains.kotlin:kotlin-android-extensions:$versions.kotlin.kotlin",
+        serializationPlugin:  "org.jetbrains.kotlinx:kotlinx-gradle-serialization-plugin:$versions.kotlin.serialization",
     ],
     firebase: [
         core: "com.google.firebase:firebase-core:$versions.firebase.core",
@@ -109,6 +119,12 @@ ext.deps = [
         kotlin: "io.reactivex.rxjava2:rxkotlin:$versions.rx.kotlin",
         modern: "com.github.SunnyDayDev:ModernRx:$versions.rx.modern@aar"
     ],
+    arch: [
+        runtime: "android.arch.lifecycle:runtime:$versions.arch.lifeCycle",
+        viewModel: "android.arch.lifecycle:viewmodel:$versions.arch.lifeCycle",
+        compiler: "android.arch.lifecycle:compiler:$versions.arch.lifeCycle",
+        extensions: "android.arch.lifecycle:extensions:$versions.arch.lifeCycle"
+    ],
     network: [
         gson: "com.google.code.gson:gson:$versions.network.gson",
         retrofit: "com.squareup.retrofit2:retrofit:$versions.network.retrofit",
@@ -127,7 +143,11 @@ ext.deps = [
     utils: [
         inputMask: "com.redmadrobot:inputmask:$versions.utils.inputMask",
         prefs: "net.grandcentrix.tray:tray:$versions.utils.trayPrefs",
-        cicerone: "ru.terrakok.cicerone:cicerone:$versions.utils.cicerone"
+        cicerone: "ru.terrakok.cicerone:cicerone:$versions.utils.cicerone",
+        mvvmkit: "me.sunnydaydev:mvvmkit:$versions.utils.mvvmkit@aar"
+    ],
+    view: [
+        circularImageView: "com.mikhaellopez:circularimageview:$versions.view.circularImageView"
     ],
     plugins: [
         versions: "com.github.ben-manes:gradle-versions-plugin:$versions.plugins.versions"
@@ -182,7 +202,7 @@ void dependenciesRx() {
 void dependenciesKotlin() {
 
     dependencies {
-        implementation deps.core.kotlinStdlib
+        implementation deps.kotlin.stdlib
     }
 
 }
@@ -201,7 +221,7 @@ void dependenciesDagger(boolean useKapt) {
 
 }
 
-ext.defaultAndroid = {
+ext.defaultAndroidModule = {
 
     android {
 

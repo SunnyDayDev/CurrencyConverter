@@ -1,0 +1,29 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+apply plugin: 'kotlinx-serialization'
+
+buildscript {
+
+    dependencies {
+
+        classpath deps.kotlin.serializationPlugin
+
+    }
+
+}
+
+defaultAndroidModule()
+
+dependencies {
+
+    implementation project(':domain_network')
+
+    deps.shortcut.kotlin()
+    deps.shortcut.rx()
+    deps.shortcut.dagger(true)
+
+    implementation deps.debug.timber
+
+}

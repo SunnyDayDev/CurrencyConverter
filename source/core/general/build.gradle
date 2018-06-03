@@ -1,0 +1,16 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'kotlin-kapt'
+
+defaultAndroidModule()
+
+dependencies {
+
+    deps.shortcut.kotlin()
+    deps.shortcut.rx()
+    deps.shortcut.dagger(true)
+
+    api deps.debug.timber
+
+}

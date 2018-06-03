@@ -1,11 +1,41 @@
+
+// region Apps (installable, instant, etc..)
+
 include ':app_normal'
 project(':app_normal').projectDir = new File('source/app/normal')
 
 include ':app_instant'
 project(':app_instant').projectDir = new File('source/app/instant')
 
+// endregion
+
+// region Core (ui, general, etc..)
+
+include ':core'
+project(':core').projectDir = new File('source/core/general')
+
+include ':core_ui'
+project(':core_ui').projectDir = new File('source/core/ui')
+
+// endregion
+
+// region Domain
+
+
+include ':domain_network'
+project(':domain_network').projectDir = new File('source/domain/network')
+
+include ':domain_currencies'
+project(':domain_currencies').projectDir = new File('source/domain/currencies')
+
+// endregion
+
+// region Features
+
 include ':feature_converter'
 project(':feature_converter').projectDir = new File('source/feature/converter')
 
 include ':feature_base'
 project(':feature_base').projectDir = new File('source/feature/base')
+
+// endregion
