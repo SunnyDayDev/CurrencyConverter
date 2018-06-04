@@ -7,6 +7,7 @@ import android.os.SystemClock
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
+import io.reactivex.rxkotlin.Singles
 import io.reactivex.schedulers.Schedulers
 import io.reactivex.subjects.BehaviorSubject
 import me.sunnydaydev.curencyconverter.coregeneral.rx.defaultSchedulers
@@ -24,6 +25,7 @@ import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.math.min
 
 /**
  * Created by sunny on 24.05.2018.
@@ -59,6 +61,8 @@ internal class ConverterViewModel @Inject constructor(
 
     private var connectionLostStartTime: Long = 0
 
+    private lateinit var knownOrder: MutableList<String>
+
     private val startedScopeDisposable = DisposableBag()
     private val currenciesRateErrorDisposable = OptionalDisposable()
 
@@ -70,10 +74,7 @@ internal class ConverterViewModel @Inject constructor(
                 .subscribeIt { base ->
                     val baseItem = currencies.find { it.code == base } ?: return@subscribeIt
                     scrollToPositionCommand.fire(0)
-                    currencies.move(
-                            fromIndex = currencies.indexOf(baseItem),
-                            toIndex = 0
-                    )
+                    orderItem(0, baseItem)
                 }
 
     }
@@ -93,7 +94,13 @@ internal class ConverterViewModel @Inject constructor(
 
     @OnLifecycleEvent(Lifecycle.Event.ON_STOP)
     fun onViewStop() {
+
         startedScopeDisposable.enabled = false
+
+        interactor.storeKnownOrder(knownOrder)
+                .defaultSchedulers()
+                .subscribeIt()
+
     }
 
     fun onRetryClicked() {
@@ -109,10 +116,10 @@ internal class ConverterViewModel @Inject constructor(
 
         state = ViewModelState.LOADING
 
-        interactor.getCurrencies()
+        Singles.zip(interactor.getCurrencies(), interactor.getKnownOrder())
                 .defaultSchedulers()
                 .subscribeIt(
-                        onSuccess = ::handleCurrencies,
+                        onSuccess = { (currencies, order) -> handleCurrencies(currencies, order) },
                         onError = SimpleErrorHandler(false) {
                             state = ViewModelState.ERROR
                         }
@@ -120,17 +127,30 @@ internal class ConverterViewModel @Inject constructor(
 
     }
 
-    private fun handleCurrencies(currencies: List<Currency>) {
+    private fun handleCurrencies(currencies: List<Currency>, storedKnownOrder: List<String>) {
 
         val baseCurrency = currencies.find { it.code == "EUR" } ?: currencies.first()
 
-        val sorted = currencies.toMutableList()
-        sorted.remove(baseCurrency)
-        sorted.add(0, baseCurrency)
+        knownOrder = storedKnownOrder.toMutableList()
+        if (knownOrder.isEmpty()) {
+            knownOrder.add(baseCurrency.code)
+        }
+
+        val sortedCurrencies = currencies.toMutableList()
+        sortedCurrencies.remove(baseCurrency)
+        sortedCurrencies.add(0, baseCurrency)
+
+        sortedCurrencies.sortBy {
+            knownOrder.indexOf(it.code).takeIf { it != -1 } ?: Int.MAX_VALUE
+        }
 
         this.currencies.forEach { it.clear() }
         this.currencies = SwapableObservableList<CurrencyItemViewModel>()
-                .apply { addAll(sorted.map(itemViewModelFactory::create)) }
+                .apply {
+                    sortedCurrencies.map {
+                        itemViewModelFactory.create(it) { orderItem(1, it) }
+                    } .also { addAll(it) }
+                }
 
         this.currencies.firstOrNull()?.focused = true
 
@@ -190,6 +210,22 @@ internal class ConverterViewModel @Inject constructor(
 
     }
 
+    private fun orderItem(position: Int, vm: CurrencyItemViewModel) {
+
+        knownOrder.remove(vm.code)
+        if (knownOrder.isEmpty()) {
+            knownOrder.add(vm.code)
+        } else {
+            knownOrder.add(min(knownOrder.lastIndex, position), vm.code)
+        }
+
+        currencies.move(
+                fromIndex = currencies.indexOf(vm),
+                toIndex = position
+        )
+
+    }
+
     private fun onCurrenciesErrorResolved() {
         currenciesRateErrorDisposable.dispose()
         connectionLost = false
@@ -204,8 +240,8 @@ internal class ConverterViewModel @Inject constructor(
         private val ratesSubject = BehaviorSubject.create<CurrencyRates>()
 
         val base: Observable<String> = baseSubject.distinctUntilChanged()
-        val baseAmount: Observable<Double> = baseAmountSubject.distinctUntilChanged()
-        val rates: Observable<Map<String, Double>> by lazy { checkedRates() }
+        private val baseAmount: Observable<Double> = baseAmountSubject.distinctUntilChanged()
+        private val rates: Observable<Map<String, Double>> by lazy { checkedRates() }
 
         fun setBase(code: String, amount: Double) {
 
@@ -216,6 +252,25 @@ internal class ConverterViewModel @Inject constructor(
 
         fun setRates(rates: CurrencyRates) {
             ratesSubject.onNext(rates)
+        }
+
+        fun getAmount(currencyCode: String): Observable<Pair<Boolean, Double>> {
+
+            val amountSource = Observables.combineLatest(baseAmount, rates) { base, rates ->
+                val nonNullBase = if (base == 0.0) 1.0 else base
+                rates.getOrElse(currencyCode) { 0.0 } * nonNullBase
+            }
+
+            val sourceDisposable = OptionalDisposable()
+            return base
+                    .flatMap {
+                        val isBase = currencyCode == it
+                        val source = amountSource.map { isBase to it }
+                        sourceDisposable.dispose()
+                        if (!isBase)  source.disposeBy(sourceDisposable)
+                        else source.firstElement().toObservable()
+                    }
+
         }
 
         private fun checkedRates(): Observable<Map<String, Double>> {

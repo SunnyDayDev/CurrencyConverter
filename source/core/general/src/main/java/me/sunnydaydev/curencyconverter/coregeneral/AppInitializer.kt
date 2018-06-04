@@ -1,6 +1,8 @@
 package me.sunnydaydev.curencyconverter.coregeneral
 
 import android.content.Context
+import android.content.pm.PackageManager
+import android.util.Log
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import io.fabric.sdk.android.Fabric
@@ -24,15 +26,22 @@ internal class AppInitializerIml @Inject constructor(
 
     override fun init(debug: Boolean) {
 
-        initCrashlytics(debug)
+        val useCrashlytics = initCrashlytics(debug)
 
-        initTimberLog(debug)
+        initTimberLog(debug, useCrashlytics)
 
         initRxPlugins()
 
     }
 
-    private fun initCrashlytics(debug: Boolean) {
+    private fun initCrashlytics(debug: Boolean): Boolean {
+
+        val meta = context.packageManager
+                .getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+                .metaData
+
+        val fabricApiKey = meta.getString("io.fabric.ApiKey")
+        if (fabricApiKey == "api_key_stub") return false
 
         val crashlyticsCore = CrashlyticsCore.Builder()
                 .disabled(debug)
@@ -42,15 +51,23 @@ internal class AppInitializerIml @Inject constructor(
                 .build()
         Fabric.with(context, crashlytics)
 
+        return true
+
     }
 
-    private fun initTimberLog(debug: Boolean) {
+    private fun initTimberLog(debug: Boolean, crashlytics: Boolean) {
 
         if (debug) {
+
             Timber.plant(Timber.DebugTree())
-        } else {
-            Timber.plant()
+
+        } else if (crashlytics) {
+
+            Fabric.getLogger().logLevel = Log.ERROR
+            Timber.plant(CrashlyticsTimberTree())
+
         }
+
     }
 
     private fun initRxPlugins() {

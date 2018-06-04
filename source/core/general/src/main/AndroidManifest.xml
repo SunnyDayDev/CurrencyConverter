@@ -3,9 +3,15 @@
     package="me.sunnydaydev.curencyconverter.coregeneral">
 
     <application>
+
         <meta-data
             android:name="aia-compat-api-min-version"
             android:value="1" />
+
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="${fabricApiKey}"/>
+
     </application>
 
 </manifest>
