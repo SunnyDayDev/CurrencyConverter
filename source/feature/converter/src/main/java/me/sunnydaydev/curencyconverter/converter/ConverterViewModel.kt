@@ -204,8 +204,8 @@ internal class ConverterViewModel @Inject constructor(
         private val ratesSubject = BehaviorSubject.create<CurrencyRates>()
 
         val base: Observable<String> = baseSubject.distinctUntilChanged()
-        val baseAmount: Observable<Double> = baseAmountSubject.distinctUntilChanged()
-        val rates: Observable<Map<String, Double>> by lazy { checkedRates() }
+        private val baseAmount: Observable<Double> = baseAmountSubject.distinctUntilChanged()
+        private val rates: Observable<Map<String, Double>> by lazy { checkedRates() }
 
         fun setBase(code: String, amount: Double) {
 
@@ -216,6 +216,25 @@ internal class ConverterViewModel @Inject constructor(
 
         fun setRates(rates: CurrencyRates) {
             ratesSubject.onNext(rates)
+        }
+
+        fun getAmount(currencyCode: String): Observable<Pair<Boolean, Double>> {
+
+            val amountSource = Observables.combineLatest(baseAmount, rates) { base, rates ->
+                val nonNullBase = if (base == 0.0) 1.0 else base
+                rates.getOrElse(currencyCode) { 0.0 } * nonNullBase
+            }
+
+            val sourceDisposable = OptionalDisposable()
+            return base
+                    .flatMap {
+                        val isBase = currencyCode == it
+                        val source = amountSource.map { isBase to it }
+                        sourceDisposable.dispose()
+                        if (!isBase)  source.disposeBy(sourceDisposable)
+                        else source.firstElement().toObservable()
+                    }
+
         }
 
         private fun checkedRates(): Observable<Map<String, Double>> {

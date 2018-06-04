@@ -2,13 +2,9 @@ package me.sunnydaydev.curencyconverter.converter
 
 import android.databinding.Bindable
 import com.github.nitrico.lastadapter.StableId
-import io.reactivex.Observable
-import io.reactivex.rxkotlin.Observables
 import me.sunnydaydev.curencyconverter.coregeneral.tryOptional
 import me.sunnydaydev.curencyconverter.coreui.viewModel.BaseVewModel
 import me.sunnydaydev.curencyconverter.domain.currencies.Currency
-import me.sunnydaydev.modernrx.OptionalDisposable
-import me.sunnydaydev.modernrx.disposeBy
 import me.sunnydaydev.mvvmkit.observable.bindable
 import java.text.DecimalFormat
 import javax.inject.Inject
@@ -46,26 +42,9 @@ internal class CurrencyItemViewModel(
     @get:Bindable val flag by bindable(currency.flagUrl)
     @get:Bindable var focused by bindable(false)
 
-    private val amountSource: Observable<Double> get() {
-
-        return Observables.combineLatest(core.baseAmount, core.rates) { base, rates ->
-            val nonNullBase = base.takeIf { it != 0.0 } ?: 1.0
-            rates.getOrElse(currency.code) { 0.0 } * nonNullBase
-        }
-
-    }
-
     init {
 
-        val sourceDisposable = OptionalDisposable()
-        core.base
-                .flatMap {
-                    val isBase = currency.code == it
-                    val source = amountSource.map { isBase to it }
-                    sourceDisposable.dispose()
-                    if (!isBase)  source.disposeBy(sourceDisposable)
-                    else source.firstElement().toObservable()
-                }
+        core.getAmount(currency.code)
                 .subscribeIt { (isBase, amount) ->
 
                     focused = isBase
