@@ -36,3 +36,6 @@ captures/
 \.DS_Store
 
 *.iml
+
+signing/
+ci/

@@ -257,3 +257,42 @@ ext.defaultAndroidModule = {
     }
 
 }
+
+ext.defaultAndroidSingnedModule = {
+
+    defaultAndroidModule()
+
+    android {
+
+        signingConfigs {
+
+            Properties signingProperties = new Properties()
+            File propsFile = new File("$project.rootProject.rootDir/signing/signing.properties")
+            if (propsFile.exists()) {
+                signingProperties.load(new FileInputStream(propsFile))
+            } else {
+                throw new IllegalStateException("Signing properties file not exist! File: " + propsFile.absolutePath)
+            }
+
+            release {
+                storeFile file("$project.rootProject.rootDir/${signingProperties['keystore']}")
+                storePassword signingProperties['keystore.password']
+                keyAlias signingProperties['keystore.release.alias']
+                keyPassword signingProperties['keystore.release.password']
+            }
+
+        }
+
+        buildTypes {
+
+            release {
+
+                signingConfig signingConfigs.release
+
+            }
+
+        }
+
+    }
+
+}
