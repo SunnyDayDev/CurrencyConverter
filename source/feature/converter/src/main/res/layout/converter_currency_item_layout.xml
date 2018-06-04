@@ -15,7 +15,10 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        onClick="@{vm::onItemClicked}"
+        tools:ignore="KeyboardInaccessibleWidget">
 
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/flag"
@@ -104,7 +107,7 @@
 
             <View
                 android:id="@+id/preventer"
-                onClick="@{vm::onClicked}"
+                onClick="@{vm::onInputClicked}"
                 visible="@{!vm.focused}"
                 android:layout_width="0dp"
                 android:layout_height="0dp"

@@ -17,8 +17,9 @@ import javax.inject.Singleton
  */
 
 internal class CurrencyItemViewModel(
-        private val stableIdProvider: StableIdProvider,
         private val currency: Currency,
+        private val onItemClickListener: (CurrencyItemViewModel) -> Unit,
+        private val stableIdProvider: StableIdProvider,
         private val core: ConverterViewModel.Core
 ): BaseVewModel(), StableId {
 
@@ -60,9 +61,13 @@ internal class CurrencyItemViewModel(
         onCleared()
     }
 
-    fun onClicked() {
+    fun onInputClicked() {
         focused = false
         notifyChanged()
+    }
+
+    fun onItemClicked() {
+        onItemClickListener(this)
     }
 
     private fun notifyChanged() {
@@ -74,8 +79,11 @@ internal class CurrencyItemViewModel(
             private val core: ConverterViewModel.Core
     ) {
 
-        fun create(currency: Currency): CurrencyItemViewModel =
-                CurrencyItemViewModel(stableIdProvider, currency, core)
+        fun create(
+                currency: Currency,
+                onItemClickListener: (CurrencyItemViewModel) -> Unit
+        ): CurrencyItemViewModel = CurrencyItemViewModel(
+                currency, onItemClickListener, stableIdProvider, core)
 
     }
 
