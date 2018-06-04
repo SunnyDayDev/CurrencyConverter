@@ -4,6 +4,8 @@ import android.content.Context
 import dagger.*
 import me.sunnydaydev.curencyconverter.coregeneral.AppInitializer
 import me.sunnydaydev.curencyconverter.coregeneral.AppInitializerIml
+import me.sunnydaydev.curencyconverter.coregeneral.Prefs
+import me.sunnydaydev.curencyconverter.coregeneral.PrefsImpl
 import javax.inject.Singleton
 
 @Singleton
@@ -38,6 +40,8 @@ interface CoreProvider {
 
     val applicationContext: Context
 
+    val prefs: Prefs
+
 }
 
 interface AppInitializerProvider {
@@ -51,5 +55,8 @@ internal interface CoreProvidesModule {
 
     @Binds
     fun bindAppInitializer(impl: AppInitializerIml): AppInitializer
+
+    @Binds
+    fun bindPrefs(impl: PrefsImpl): Prefs
 
 }
