@@ -4,6 +4,8 @@
     <color name="palette_white">#fff</color>
     <color name="palette_black">#000</color>
     <color name="palette_red">#cf0000</color>
+    <color name="palette_yellow_900">#f57f17</color>
+    <color name="palette_orange_900">#e65100</color>
 
     <color name="text_major">#f30a0a0a</color>
     <color name="text_minor">#f5464646</color>

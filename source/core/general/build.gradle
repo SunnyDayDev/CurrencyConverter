@@ -13,4 +13,8 @@ dependencies {
 
     api deps.debug.timber
 
+    implementation(deps.debug.crashlytics) {
+        transitive = true
+    }
+
 }
