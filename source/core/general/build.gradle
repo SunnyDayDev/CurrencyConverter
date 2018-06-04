@@ -16,11 +16,20 @@ android {
             Properties apikeysProperties = new Properties()
             apikeysProperties.load(new FileInputStream(apikeysFile))
 
-            resValue "string", "fabric_api_key", apikeysProperties['fabric.apiKey']
+            String fabricApiKey = apikeysProperties['fabric.apiKey']
+            if (fabricApiKey == null) {
+                throw new IllegalStateException("fabric.apiKey not provided.")
+            }
+
+            manifestPlaceholders += [fabricApiKey: fabricApiKey]
+
+            println(":core: Use real fabric api key")
 
         } else {
 
-            resValue "string", "fabric_api_key", "api_key_stub"
+            manifestPlaceholders += [fabricApiKey: "api_key_stub"]
+
+            println(":core: Use fabric api key stub")
 
         }
 

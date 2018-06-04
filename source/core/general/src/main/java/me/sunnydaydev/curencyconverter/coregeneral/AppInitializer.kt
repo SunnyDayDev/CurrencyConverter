@@ -1,6 +1,7 @@
 package me.sunnydaydev.curencyconverter.coregeneral
 
 import android.content.Context
+import android.content.pm.PackageManager
 import android.util.Log
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
@@ -35,7 +36,12 @@ internal class AppInitializerIml @Inject constructor(
 
     private fun initCrashlytics(debug: Boolean): Boolean {
 
-        if (context.getString(R.string.fabric_api_key) == "api_key_stub") return false
+        val meta = context.packageManager
+                .getApplicationInfo(context.packageName, PackageManager.GET_META_DATA)
+                .metaData
+
+        val fabricApiKey = meta.getString("io.fabric.ApiKey")
+        if (fabricApiKey == "api_key_stub") return false
 
         val crashlyticsCore = CrashlyticsCore.Builder()
                 .disabled(debug)
@@ -57,7 +63,7 @@ internal class AppInitializerIml @Inject constructor(
 
         } else if (crashlytics) {
 
-            Fabric.getLogger().logLevel = if (BuildConfig.DEBUG) Log.DEBUG else Log.ERROR
+            Fabric.getLogger().logLevel = Log.ERROR
             Timber.plant(CrashlyticsTimberTree())
 
         }

@@ -63,8 +63,9 @@ ext.versions += [
         circularImageView: '3.0.2'
     ],
     debug: [
-         crashlytics: '2.9.2',
-         timber: '4.7.0'
+        fabricPlugin: '1.25.4',
+        crashlytics: '2.9.2',
+        timber: '4.7.0'
     ],
     plugins: [
         versions: '0.17.0'
@@ -137,6 +138,7 @@ ext.deps = [
         kotlinxConverter: "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:$versions.network.kotlinxConverter"
     ],
     debug: [
+        fabricPlugin: "io.fabric.tools:gradle:$versions.debug.fabricPlugin",
         crashlytics: "com.crashlytics.sdk.android:crashlytics:$versions.debug.crashlytics@aar",
         timber: "com.jakewharton.timber:timber:$versions.debug.timber"
     ],
