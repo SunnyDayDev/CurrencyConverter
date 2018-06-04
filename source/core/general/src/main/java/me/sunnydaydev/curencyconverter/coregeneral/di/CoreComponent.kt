@@ -2,13 +2,15 @@ package me.sunnydaydev.curencyconverter.coregeneral.di
 
 import android.content.Context
 import dagger.*
+import me.sunnydaydev.curencyconverter.coregeneral.AppInitializer
+import me.sunnydaydev.curencyconverter.coregeneral.AppInitializerIml
 import javax.inject.Singleton
 
 @Singleton
 @Component(
         modules = [CoreProvidesModule::class]
 )
-interface CoreComponent: CoreProvider {
+interface CoreComponent: CoreProvider, AppInitializerProvider {
 
     @Component.Builder
     interface Builder {
@@ -38,7 +40,16 @@ interface CoreProvider {
 
 }
 
+interface AppInitializerProvider {
+
+    val appInitializer: AppInitializer
+
+}
+
 @Module
-internal class CoreProvidesModule {
+internal interface CoreProvidesModule {
+
+    @Binds
+    fun bindAppInitializer(impl: AppInitializerIml): AppInitializer
 
 }

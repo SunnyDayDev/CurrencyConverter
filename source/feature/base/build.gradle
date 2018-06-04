@@ -13,6 +13,8 @@ dependencies {
     application project(':app_normal')
     feature project(':feature_converter')
 
+    implementation project(':core_ui')
+
     api deps.support.appcompat
     api deps.support.constraintLayout
 
