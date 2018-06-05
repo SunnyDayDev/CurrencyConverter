@@ -1,0 +1,2 @@
+Fixed focus loos on key event ENTER.
+"." was unrecognized as decimal delimiter. Fixed.

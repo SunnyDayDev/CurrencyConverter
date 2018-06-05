@@ -1,0 +1,5 @@
+With this application, you can easily convert one currency to another.
+
+We made sure that it took as little as possible of your actions.
+
+ATTENTION: The rate may differ from the bank rate in which you are going to exchange currency.

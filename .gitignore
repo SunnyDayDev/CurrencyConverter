@@ -40,3 +40,9 @@ captures/
 signing/
 ci/
 fabric\.properties
+
+fastlane/
+
+Gemfile
+
+Gemfile\.lock
