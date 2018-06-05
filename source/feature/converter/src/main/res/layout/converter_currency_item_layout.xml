@@ -102,8 +102,10 @@
                 android:inputType="numberDecimal"
                 android:minWidth="64dp"
                 android:text="@={vm.amount}"
+                android:imeOptions="actionDone"
+                onKeyEvent="@{vm::onInputKeyEvent}"
                 tools:ignore="UnusedAttribute"
-                tools:text="10.03" />
+                tools:text="10.03"/>
 
             <View
                 android:id="@+id/preventer"
