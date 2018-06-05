@@ -129,7 +129,9 @@ internal class ConverterViewModel @Inject constructor(
 
     private fun handleCurrencies(currencies: List<Currency>, storedKnownOrder: List<String>) {
 
-        val baseCurrency = currencies.find { it.code == "EUR" } ?: currencies.first()
+        val initialBase = storedKnownOrder.firstOrNull() ?: "EUR"
+
+        val baseCurrency = currencies.find { it.code == initialBase } ?: currencies.first()
 
         knownOrder = storedKnownOrder.toMutableList()
         if (knownOrder.isEmpty()) {
@@ -212,6 +214,9 @@ internal class ConverterViewModel @Inject constructor(
 
     private fun orderItem(position: Int, vm: CurrencyItemViewModel) {
 
+        val currentIndex = currencies.indexOf(vm)
+        if (currentIndex == position || currentIndex == -1) return
+
         knownOrder.remove(vm.code)
         if (knownOrder.isEmpty()) {
             knownOrder.add(vm.code)
@@ -220,7 +225,7 @@ internal class ConverterViewModel @Inject constructor(
         }
 
         currencies.move(
-                fromIndex = currencies.indexOf(vm),
+                fromIndex = currentIndex,
                 toIndex = position
         )
 

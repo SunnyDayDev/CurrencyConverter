@@ -19,7 +19,27 @@ defaultAndroidSingnedModule()
 android {
 
     defaultConfig {
-        applicationId "me.sunnydaydev.curencyconverter.app"
+
+        File configFile = file("$rootProject.projectDir/signing/config.properties")
+
+        if (configFile.exists()) {
+
+            Properties configProperties = new Properties()
+            configProperties.load(new FileInputStream(configFile))
+
+            String configuredApplicationId = configProperties['application.normal.id']
+            if (configuredApplicationId == null) {
+                throw new IllegalStateException("application.normal.id not provided.")
+            }
+
+            applicationId configuredApplicationId
+
+        } else {
+
+            applicationId "any.domain.currencyconverter.app"
+
+        }
+
     }
 
     dataBinding.enabled = true
