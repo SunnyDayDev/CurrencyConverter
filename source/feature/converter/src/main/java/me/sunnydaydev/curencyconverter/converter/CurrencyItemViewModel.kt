@@ -28,6 +28,10 @@ internal class CurrencyItemViewModel(
         private val FORMAT = DecimalFormat().apply {
             minimumFractionDigits = 2
             maximumFractionDigits = 4
+            decimalFormatSymbols.apply {
+                groupingSeparator = ','
+                decimalSeparator = '.'
+            }
         }
 
     }
