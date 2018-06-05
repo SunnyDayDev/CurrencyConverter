@@ -1,6 +1,7 @@
 package me.sunnydaydev.curencyconverter.converter
 
 import android.databinding.Bindable
+import android.view.KeyEvent
 import com.github.nitrico.lastadapter.StableId
 import me.sunnydaydev.curencyconverter.coregeneral.tryOptional
 import me.sunnydaydev.curencyconverter.coreui.viewModel.BaseVewModel
@@ -72,6 +73,11 @@ internal class CurrencyItemViewModel(
 
     fun onItemClicked() {
         onItemClickListener(this)
+    }
+
+    @Suppress("UNUSED_PARAMETER")
+    fun onInputKeyEvent(keyCode: Int, event: KeyEvent): Boolean {
+        return keyCode == KeyEvent.KEYCODE_ENTER
     }
 
     private fun notifyChanged() {
