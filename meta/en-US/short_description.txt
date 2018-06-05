@@ -1,0 +1,1 @@
+Very simple and convenient application for currency conversion.
