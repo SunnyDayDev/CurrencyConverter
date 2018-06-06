@@ -37,7 +37,7 @@ captures/
 
 *.iml
 
-signing/
+private/
 ci/
 fabric\.properties
 
