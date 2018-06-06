@@ -268,19 +268,11 @@ ext.defaultAndroidSingnedModule = {
 
         signingConfigs {
 
-            Properties signingProperties = new Properties()
-            File propsFile = new File("$project.rootProject.rootDir/signing/signing.properties")
-            if (propsFile.exists()) {
-                signingProperties.load(new FileInputStream(propsFile))
-            } else {
-                throw new IllegalStateException("Signing properties file not exist! File: " + propsFile.absolutePath)
-            }
-
             release {
-                storeFile file("$project.rootProject.rootDir/${signingProperties['keystore']}")
-                storePassword signingProperties['keystore.password']
-                keyAlias signingProperties['keystore.release.alias']
-                keyPassword signingProperties['keystore.release.password']
+                storeFile file("$project.rootProject.rootDir/${privateProperty('keystore.file')}")
+                storePassword privateProperty('keystore.password')
+                keyAlias privateProperty('keystore.release.alias')
+                keyPassword privateProperty('keystore.release.password')
             }
 
         }
@@ -296,5 +288,34 @@ ext.defaultAndroidSingnedModule = {
         }
 
     }
+
+}
+
+ext.privateFile = { String path ->
+
+    File file = file("$rootProject.projectDir/private/$path")
+
+    if (file == null) {
+        throw new IllegalArgumentException("Private file $path not exists.")
+    }
+
+    return file
+
+}
+
+ext.privateProperty = { String name ->
+
+    File file = privateFile("props.properties")
+
+    Properties props = new Properties()
+    props.load(new FileInputStream(file))
+
+    String property = props[name]
+
+    if (property == null) {
+        throw new IllegalArgumentException("Private property $name not exists.")
+    }
+
+    return property
 
 }
