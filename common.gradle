@@ -57,7 +57,7 @@ ext.versions += [
         inputMask: '3.4.0',
         trayPrefs: '0.12.0',
         cicerone: '3.0.0',
-        mvvmkit: '854c9390d0'
+        mvvmkit: 'c53bdc8150'
     ],
     view: [
         circularImageView: '3.0.2'

@@ -18,6 +18,8 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         onClick="@{vm::onItemClicked}"
+        android:foreground="?attr/selectableItemBackground"
+        android:background="@color/palette_white"
         tools:ignore="KeyboardInaccessibleWidget">
 
         <com.mikhaellopez.circularimageview.CircularImageView
@@ -28,7 +30,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:background="@color/palette_white"
             android:contentDescription="@string/prompt_flag_description"
             app:civ_border_color="@color/flag_icon_border"
             app:civ_border_width="1dp"
