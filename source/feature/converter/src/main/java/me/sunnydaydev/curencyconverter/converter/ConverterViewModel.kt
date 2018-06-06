@@ -18,14 +18,13 @@ import me.sunnydaydev.curencyconverter.domain.currencies.Currency
 import me.sunnydaydev.curencyconverter.domain.currencies.CurrencyRates
 import me.sunnydaydev.modernrx.*
 import me.sunnydaydev.mvvmkit.observable.Command
-import me.sunnydaydev.mvvmkit.observable.SwapableObservableList
+import me.sunnydaydev.mvvmkit.observable.ExtendedObservableArrayList
 import me.sunnydaydev.mvvmkit.observable.bindable
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.math.min
 
 /**
  * Created by sunny on 24.05.2018.
@@ -49,7 +48,7 @@ internal class ConverterViewModel @Inject constructor(
 
     }
 
-    @get:Bindable var currencies by bindable(SwapableObservableList<CurrencyItemViewModel>())
+    @get:Bindable var currencies by bindable(CurrenciesList())
 
     @get:Bindable var state by bindable(ViewModelState.LOADING)
 
@@ -60,8 +59,6 @@ internal class ConverterViewModel @Inject constructor(
     val scrollToPositionCommand = Command<Int>()
 
     private var connectionLostStartTime: Long = 0
-
-    private lateinit var knownOrder: MutableList<String>
 
     private val startedScopeDisposable = DisposableBag()
     private val currenciesRateErrorDisposable = OptionalDisposable()
@@ -97,6 +94,7 @@ internal class ConverterViewModel @Inject constructor(
 
         startedScopeDisposable.enabled = false
 
+        val knownOrder = currencies.map { it.code }
         interactor.storeKnownOrder(knownOrder)
                 .defaultSchedulers()
                 .subscribeIt()
@@ -106,6 +104,19 @@ internal class ConverterViewModel @Inject constructor(
     fun onRetryClicked() {
         loadCurrencies()
     }
+
+    fun onItemMoved(from: Int, to: Int): Boolean {
+
+        if (from == 0) return false
+
+        val vm = currencies[from]
+        orderItem(to, vm, true)
+
+        return true
+
+    }
+
+    fun canDropOverItem(current:Int, target: Int): Boolean = target != 0 && current != 0
 
     override fun onCleared() {
         super.onCleared()
@@ -127,16 +138,11 @@ internal class ConverterViewModel @Inject constructor(
 
     }
 
-    private fun handleCurrencies(currencies: List<Currency>, storedKnownOrder: List<String>) {
+    private fun handleCurrencies(currencies: List<Currency>, knownOrder: List<String>) {
 
-        val initialBase = storedKnownOrder.firstOrNull() ?: "EUR"
+        val initialBase = knownOrder.firstOrNull() ?: "EUR"
 
         val baseCurrency = currencies.find { it.code == initialBase } ?: currencies.first()
-
-        knownOrder = storedKnownOrder.toMutableList()
-        if (knownOrder.isEmpty()) {
-            knownOrder.add(baseCurrency.code)
-        }
 
         val sortedCurrencies = currencies.toMutableList()
         sortedCurrencies.remove(baseCurrency)
@@ -147,12 +153,11 @@ internal class ConverterViewModel @Inject constructor(
         }
 
         this.currencies.forEach { it.clear() }
-        this.currencies = SwapableObservableList<CurrencyItemViewModel>()
-                .apply {
-                    sortedCurrencies.map {
-                        itemViewModelFactory.create(it) { orderItem(1, it) }
-                    } .also { addAll(it) }
-                }
+        this.currencies = CurrenciesList().apply {
+              sortedCurrencies.map {
+                  itemViewModelFactory.create(it) { orderItem(1, it) }
+              } .also { addAll(it) }
+        }
 
         this.currencies.firstOrNull()?.focused = true
 
@@ -212,21 +217,15 @@ internal class ConverterViewModel @Inject constructor(
 
     }
 
-    private fun orderItem(position: Int, vm: CurrencyItemViewModel) {
+    private fun orderItem(position: Int, vm: CurrencyItemViewModel, notify: Boolean = true) {
 
         val currentIndex = currencies.indexOf(vm)
         if (currentIndex == position || currentIndex == -1) return
 
-        knownOrder.remove(vm.code)
-        if (knownOrder.isEmpty()) {
-            knownOrder.add(vm.code)
-        } else {
-            knownOrder.add(min(knownOrder.lastIndex, position), vm.code)
-        }
-
         currencies.move(
                 fromIndex = currentIndex,
-                toIndex = position
+                toIndex = position,
+                notify = notify
         )
 
     }
@@ -293,6 +292,24 @@ internal class ConverterViewModel @Inject constructor(
             return ratesSource.rates
                     .mapValues { it.value * fallbackRatio } + fallbackValues
 
+        }
+
+    }
+
+}
+
+internal class CurrenciesList: ExtendedObservableArrayList<CurrencyItemViewModel>() {
+
+    fun move(fromIndex: Int, toIndex: Int, notify: Boolean = true) {
+
+        if (fromIndex == toIndex) return
+
+        synchronized(this) {
+            add(toIndex, removeAt(fromIndex, false), false)
+        }
+
+        if (notify) {
+            notifyMoved(fromIndex, toIndex, 1)
         }
 
     }
