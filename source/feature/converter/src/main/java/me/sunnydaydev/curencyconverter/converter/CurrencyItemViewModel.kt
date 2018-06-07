@@ -8,6 +8,8 @@ import me.sunnydaydev.curencyconverter.coreui.viewModel.BaseVewModel
 import me.sunnydaydev.curencyconverter.domain.currencies.Currency
 import me.sunnydaydev.mvvmkit.observable.bindable
 import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
+import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -29,7 +31,7 @@ internal class CurrencyItemViewModel(
         private val FORMAT = DecimalFormat().apply {
             minimumFractionDigits = 2
             maximumFractionDigits = 4
-            decimalFormatSymbols.apply {
+            decimalFormatSymbols = DecimalFormatSymbols(Locale.GERMANY).apply {
                 groupingSeparator = ','
                 decimalSeparator = '.'
             }
