@@ -13,11 +13,13 @@
 
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
         onClick="@{vm::onItemClicked}"
+        android:foreground="?attr/selectableItemBackground"
+        android:background="@color/palette_white"
         tools:ignore="KeyboardInaccessibleWidget">
 
         <com.mikhaellopez.circularimageview.CircularImageView
@@ -28,7 +30,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
-            android:background="@color/palette_white"
             android:contentDescription="@string/prompt_flag_description"
             app:civ_border_color="@color/flag_icon_border"
             app:civ_border_width="1dp"
@@ -37,7 +38,7 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:background="@drawable/round_preview" />
 
-        <android.support.constraint.Guideline
+        <androidx.constraintlayout.Guideline
             android:id="@+id/vertical_half_guidline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -122,13 +123,13 @@
 
         </RelativeLayout>
 
-        <android.support.constraint.Barrier
+        <androidx.constraintlayout.Barrier
             android:id="@+id/textsBarier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="end"
             app:constraint_referenced_ids="code,name"/>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.ConstraintLayout>
 
 </layout>

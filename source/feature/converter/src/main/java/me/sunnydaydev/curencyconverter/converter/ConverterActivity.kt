@@ -1,7 +1,7 @@
 package me.sunnydaydev.curencyconverter.converter
 
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 
 /**
  * Created by sunny on 30.05.2018.

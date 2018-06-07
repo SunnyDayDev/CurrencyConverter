@@ -1,6 +1,6 @@
 package me.sunnydaydev.curencyconverter.converter.di
 
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.ViewModel
 import dagger.Binds
 import dagger.Component
 import dagger.Module
