@@ -1,0 +1,2 @@
+"." was unrecognized as decimal delimiter. Fixed.
+Dependencies updated.
