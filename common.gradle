@@ -6,7 +6,6 @@ ext.versions = [
     buildTools: '28.0.0',
     core: [
         androidPlugin: '3.2.0-alpha16',
-        googleServicesPlugin: '3.2.1',
         dagger: '2.16'
     ]
 ]
@@ -30,12 +29,13 @@ ext.versions += [
         ]
     ],
     googleServices: [
+        plugin: '3.2.1',
         general: '15.0.1',
     ],
     firebase: [
-        core: '15.0.2',
-        messaging: '15.0.2',
-        analytics: '15.0.2'
+        core: '16.0.0',
+        messaging: '17.0.0',
+        analytics: '16.0.0'
     ],
     dataBinding: [
         lastAdapter: 'androidx-1.0.0-alpha3',
@@ -57,7 +57,7 @@ ext.versions += [
     utils: [
         inputMask: '3.4.0',
         trayPrefs: '0.12.0',
-        cicerone: '3.0.0',
+        cicerone: 'b1ecd6d202',
         mvvmkit: '900d63b865'
     ],
     view: [
@@ -77,8 +77,8 @@ ext.deps = [
     core: [
         // Android
         androidPlugin: "com.android.tools.build:gradle:$versions.core.androidPlugin",
-        googleServicesPlugin: "com.google.gms:google-services:$versions.core.googleServicesPlugin",
-        
+        googleServicesPlugin: "com.google.gms:google-services:$versions.googleServices.plugin",
+
         // Dagger
         dagger: "com.google.dagger:dagger:$versions.core.dagger",
         daggerAndroid: "com.google.dagger:dagger-android:$versions.core.dagger",
@@ -146,7 +146,7 @@ ext.deps = [
     utils: [
         inputMask: "com.redmadrobot:inputmask:$versions.utils.inputMask",
         prefs: "net.grandcentrix.tray:tray:$versions.utils.trayPrefs",
-        cicerone: "ru.terrakok.cicerone:cicerone:$versions.utils.cicerone",
+        cicerone: "me.sunnydaydev:cicerone:$versions.utils.cicerone",
         mvvmkit: "me.sunnydaydev:mvvmkit:$versions.utils.mvvmkit@aar"
     ],
     view: [
@@ -158,34 +158,34 @@ ext.deps = [
 ]
 
 ext.deps += [
-        shortcut: [
-                rx: { dependenciesRx() },
-                kotlin: { dependenciesKotlin() },
-                dagger: { kapt -> dependenciesDagger(kapt)}
-        ]
+    shortcut: [
+        rx: { dependenciesRx() },
+        kotlin: { dependenciesKotlin() },
+        dagger: { kapt -> dependenciesDagger(kapt)}
+    ]
 ]
 
 ext.handleRepositories = { handler, buildScript ->
 
-  handler.google()
-  handler.jcenter()
-  handler.mavenCentral()
-  handler.maven { url 'http://dl.bintray.com/kotlin/kotlin-eap' }
-  handler.maven { url 'https://maven.fabric.io/public' }
-  handler.maven { url 'http://www.idescout.com/maven/repo/' }
-  handler.maven { url "https://kotlin.bintray.com/kotlinx" }
+    handler.google()
+    handler.jcenter()
+    handler.mavenCentral()
+    handler.maven { url 'http://dl.bintray.com/kotlin/kotlin-eap' }
+    handler.maven { url 'https://maven.fabric.io/public' }
+    handler.maven { url 'http://www.idescout.com/maven/repo/' }
+    handler.maven { url "https://kotlin.bintray.com/kotlinx" }
 
-  if (!buildScript) {
-      handler.maven { url 'https://jitpack.io' }
-  }
+    if (!buildScript) {
+        handler.maven { url 'https://jitpack.io' }
+    }
 
-  handler.flatDir { dirs 'libs' }
+    handler.flatDir { dirs 'libs' }
 
-  // Local project maven
-  handler.maven {
-    def internalMaven = "$project.rootProject.projectDir/maven/"
-    url project.uri(internalMaven)
-  }
+    // Local project maven
+    handler.maven {
+        def internalMaven = "$project.rootProject.projectDir/maven/"
+        url project.uri(internalMaven)
+    }
 
 }
 
@@ -267,6 +267,8 @@ ext.defaultAndroidSingnedModule = {
     defaultAndroidModule()
 
     android {
+
+        if (!privateFile('props.properties').exists()) return
 
         signingConfigs {
 
