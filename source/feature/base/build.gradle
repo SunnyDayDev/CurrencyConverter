@@ -15,7 +15,7 @@ dependencies {
 
     implementation project(':core_ui')
 
-    api deps.support.appcompat
-    api deps.support.constraintLayout
+    api deps.androidx.appcompat
+    api deps.androidx.constraintLayout
 
 }

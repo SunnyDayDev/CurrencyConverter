@@ -1,6 +1,6 @@
 package me.sunnydaydev.curencyconverter.coreui
 
-import android.databinding.ViewDataBinding
+import androidx.databinding.ViewDataBinding
 import me.sunnydaydev.curencyconverter.coregeneral.di.RequirementsComponentProvider
 import me.sunnydaydev.mvvmkit.MVVMFragment
 

@@ -1,6 +1,6 @@
 package me.sunnydaydev.curencyconverter.converter
 
-import android.databinding.Bindable
+import androidx.databinding.Bindable
 import android.view.KeyEvent
 import com.github.nitrico.lastadapter.StableId
 import me.sunnydaydev.curencyconverter.coregeneral.tryOptional

@@ -1,9 +1,9 @@
 // Core versions
 ext.versions = [
-    compileSdk: 27,
-    targetSdk: 27,
+    compileSdk: 28,
+    targetSdk: 28,
     minSdk: 17,
-    buildTools: '27.0.3',
+    buildTools: '28.0.0',
     core: [
         androidPlugin: '3.2.0-alpha16',
         googleServicesPlugin: '3.2.1',
@@ -17,12 +17,17 @@ ext.versions += [
         kotlin: '1.2.41',
         serialization: '0.5.0',
         reflectLite: '1.0.0',
+        ktx: '1.0.0-alpha1'
     ],
-    support: [
-        support: '27.1.1',
-        constraint: '1.1.0',
+    androidx: [
+        compat: '1.0.0-alpha3',
+        constraint: '1.1.1',
         flex: '0.3.2',
-        multidex: '1.0.3'
+        multidex: '2.0.0',
+        arch: [
+            lifeCycle: '2.0.0-alpha1',
+            persistence: '2.0.0-alpha1'
+        ]
     ],
     googleServices: [
         general: '15.0.1',
@@ -33,7 +38,7 @@ ext.versions += [
         analytics: '15.0.2'
     ],
     dataBinding: [
-        lastAdapter: '2.3.0',
+        lastAdapter: 'androidx-1.0.0-alpha3',
         compiler: versions.core.androidPlugin
     ],
     network: [
@@ -49,15 +54,11 @@ ext.versions += [
         kotlin: '2.2.0',
         modern: '1.0.0'
     ],
-    arch: [
-        lifeCycle: '1.1.1',
-        persistence: '1.1.0'
-    ],
     utils: [
         inputMask: '3.4.0',
         trayPrefs: '0.12.0',
         cicerone: '3.0.0',
-        mvvmkit: 'c53bdc8150'
+        mvvmkit: '900d63b865'
     ],
     view: [
         circularImageView: '3.0.2'
@@ -93,38 +94,38 @@ ext.deps = [
         plugin: "org.jetbrains.kotlin:kotlin-gradle-plugin:$versions.kotlin.kotlin",
         extensionsPlugin: "org.jetbrains.kotlin:kotlin-android-extensions:$versions.kotlin.kotlin",
         serializationPlugin:  "org.jetbrains.kotlinx:kotlinx-gradle-serialization-plugin:$versions.kotlin.serialization",
+        ktx: "androidx.core:core-ktx:$versions.kotlin.ktx"
     ],
     firebase: [
         core: "com.google.firebase:firebase-core:$versions.firebase.core",
         analytics: "com.google.firebase:firebase-analytics:$versions.firebase.analytics",
         messaging: "com.google.firebase:firebase-messaging:$versions.firebase.messaging"
     ],
-    support: [
-        v4: "com.android.support:support-v4:$versions.support.support",
-        appcompat: "com.android.support:appcompat-v7:$versions.support.support",
-        design: "com.android.support:design:$versions.support.support",
-        recyclerView: "com.android.support:recyclerview-v7:$versions.support.support",
-        card: "com.android.support:cardview-v7:$versions.support.support",
-        constraintLayout: "com.android.support.constraint:constraint-layout:$versions.support.constraint",
-        flexLayout: "com.google.android:flexbox:$versions.support.flex",
-        multidex: "com.android.support:multidex:$versions.support.multidex",
-        multidexInstrumentation: "com.android.support:multidex-instrumentation:$versions.support.multidex",
+    androidx: [
+        appcompat: "androidx.appcompat:appcompat:$versions.androidx.compat",
+        design: "com.google.android.material:material:$versions.androidx.compat",
+        recyclerView: "androidx.recyclerview:recyclerview:$versions.androidx.compat",
+        card: "androidx.cardview:cardview:$versions.androidx.compat",
+        constraintLayout: "androidx.constraintlayout:constraintlayout:$versions.androidx.constraint",
+        flexLayout: "com.google.android:flexbox:$versions.androidx.flex",
+        multidex: "androidx.multidex:multidex:$versions.androidx.multidex",
+        multidexInstrumentation: "androidx.multidex:multidex-instrumentation:$versions.androidx.multidex",
+        arch: [
+            runtime: "androidx.lifecycle:lifecycle-runtime:$versions.androidx.arch.lifeCycle",
+            viewModel: "androidx.lifecycle:lifecycle-viewmodel:$versions.androidx.arch.lifeCycle",
+            compiler: "androidx.lifecycle:lifecycle-compiler:$versions.androidx.arch.lifeCycle",
+            extensions: "androidx.lifecycle:lifecycle-extensions:$versions.androidx.arch.lifeCycle"
+        ]
     ],
     dataBinding: [
         compiler: "androidx.databinding:databinding-compiler:$versions.dataBinding.compiler",
-        lastAdapter: "com.github.nitrico.lastadapter:lastadapter:$versions.dataBinding.lastAdapter"
+        lastAdapter: "me.sunnydaydev:lastadapter:$versions.dataBinding.lastAdapter"
     ],
     rx: [
         java: "io.reactivex.rxjava2:rxjava:$versions.rx.java",
         android: "io.reactivex.rxjava2:rxandroid:$versions.rx.android",
         kotlin: "io.reactivex.rxjava2:rxkotlin:$versions.rx.kotlin",
         modern: "com.github.SunnyDayDev:ModernRx:$versions.rx.modern@aar"
-    ],
-    arch: [
-        runtime: "android.arch.lifecycle:runtime:$versions.arch.lifeCycle",
-        viewModel: "android.arch.lifecycle:viewmodel:$versions.arch.lifeCycle",
-        compiler: "android.arch.lifecycle:compiler:$versions.arch.lifeCycle",
-        extensions: "android.arch.lifecycle:extensions:$versions.arch.lifeCycle"
     ],
     network: [
         gson: "com.google.code.gson:gson:$versions.network.gson",
@@ -205,6 +206,7 @@ void dependenciesKotlin() {
 
     dependencies {
         implementation deps.kotlin.stdlib
+        implementation deps.kotlin.ktx
     }
 
 }

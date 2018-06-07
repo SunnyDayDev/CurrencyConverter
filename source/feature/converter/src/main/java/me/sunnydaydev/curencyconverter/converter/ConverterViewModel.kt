@@ -1,8 +1,8 @@
 package me.sunnydaydev.curencyconverter.converter
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.OnLifecycleEvent
-import android.databinding.Bindable
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.OnLifecycleEvent
+import androidx.databinding.Bindable
 import android.os.SystemClock
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -18,7 +18,8 @@ import me.sunnydaydev.curencyconverter.domain.currencies.Currency
 import me.sunnydaydev.curencyconverter.domain.currencies.CurrencyRates
 import me.sunnydaydev.modernrx.*
 import me.sunnydaydev.mvvmkit.observable.Command
-import me.sunnydaydev.mvvmkit.observable.ExtendedObservableArrayList
+import me.sunnydaydev.mvvmkit.observable.MVVMArrayList
+import me.sunnydaydev.mvvmkit.observable.MVVMList
 import me.sunnydaydev.mvvmkit.observable.bindable
 import java.text.SimpleDateFormat
 import java.util.*
@@ -48,7 +49,7 @@ internal class ConverterViewModel @Inject constructor(
 
     }
 
-    @get:Bindable var currencies by bindable(CurrenciesList())
+    @get:Bindable var currencies: MVVMList<CurrencyItemViewModel> by bindable(MVVMArrayList())
 
     @get:Bindable var state by bindable(ViewModelState.LOADING)
 
@@ -110,7 +111,7 @@ internal class ConverterViewModel @Inject constructor(
         if (from == 0) return false
 
         val vm = currencies[from]
-        orderItem(to, vm, true)
+        orderItem(to, vm)
 
         return true
 
@@ -153,7 +154,7 @@ internal class ConverterViewModel @Inject constructor(
         }
 
         this.currencies.forEach { it.clear() }
-        this.currencies = CurrenciesList().apply {
+        this.currencies = MVVMArrayList<CurrencyItemViewModel>().apply {
               sortedCurrencies.map {
                   itemViewModelFactory.create(it) { orderItem(1, it) }
               } .also { addAll(it) }
@@ -217,15 +218,14 @@ internal class ConverterViewModel @Inject constructor(
 
     }
 
-    private fun orderItem(position: Int, vm: CurrencyItemViewModel, notify: Boolean = true) {
+    private fun orderItem(position: Int, vm: CurrencyItemViewModel) {
 
         val currentIndex = currencies.indexOf(vm)
         if (currentIndex == position || currentIndex == -1) return
 
         currencies.move(
                 fromIndex = currentIndex,
-                toIndex = position,
-                notify = notify
+                toIndex = position
         )
 
     }
@@ -292,24 +292,6 @@ internal class ConverterViewModel @Inject constructor(
             return ratesSource.rates
                     .mapValues { it.value * fallbackRatio } + fallbackValues
 
-        }
-
-    }
-
-}
-
-internal class CurrenciesList: ExtendedObservableArrayList<CurrencyItemViewModel>() {
-
-    fun move(fromIndex: Int, toIndex: Int, notify: Boolean = true) {
-
-        if (fromIndex == toIndex) return
-
-        synchronized(this) {
-            add(toIndex, removeAt(fromIndex, false), false)
-        }
-
-        if (notify) {
-            notifyMoved(fromIndex, toIndex, 1)
         }
 
     }

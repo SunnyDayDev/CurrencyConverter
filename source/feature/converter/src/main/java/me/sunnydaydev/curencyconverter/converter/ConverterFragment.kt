@@ -1,6 +1,6 @@
 package me.sunnydaydev.curencyconverter.converter
 
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
