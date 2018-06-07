@@ -13,7 +13,7 @@
 
     </data>
 
-    <android.support.constraint.ConstraintLayout
+    <androidx.constraintlayout.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:clickable="true"
@@ -38,7 +38,7 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:background="@drawable/round_preview" />
 
-        <android.support.constraint.Guideline
+        <androidx.constraintlayout.Guideline
             android:id="@+id/vertical_half_guidline"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -123,13 +123,13 @@
 
         </RelativeLayout>
 
-        <android.support.constraint.Barrier
+        <androidx.constraintlayout.Barrier
             android:id="@+id/textsBarier"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:barrierDirection="end"
             app:constraint_referenced_ids="code,name"/>
 
-    </android.support.constraint.ConstraintLayout>
+    </androidx.constraintlayout.ConstraintLayout>
 
 </layout>

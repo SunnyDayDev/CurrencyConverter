@@ -1,6 +1,6 @@
 package me.sunnydaydev.curencyconverter.coreui.viewModel
 
-import android.support.annotation.CallSuper
+import androidx.annotation.CallSuper
 import me.sunnydaydev.modernrx.*
 import me.sunnydaydev.mvvmkit.viewModel.MVVMViewModel
 

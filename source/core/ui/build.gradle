@@ -22,13 +22,13 @@ dependencies {
 
     implementation deps.network.glide
 
-    api deps.support.appcompat
-    api deps.support.recyclerView
+    api deps.androidx.appcompat
+    api deps.androidx.recyclerView
     api deps.dataBinding.lastAdapter
-    api deps.arch.viewModel
-    api deps.arch.runtime
+    api deps.androidx.arch.viewModel
+    api deps.androidx.arch.runtime
     api deps.utils.mvvmkit
-    implementation deps.arch.extensions
+    implementation deps.androidx.arch.extensions
 
     kapt deps.dataBinding.compiler
 
