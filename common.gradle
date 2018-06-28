@@ -5,7 +5,7 @@ ext.versions = [
     minSdk: 17,
     buildTools: '28.0.0',
     core: [
-        androidPlugin: '3.2.0-alpha16',
+        androidPlugin: '3.2.0-beta01',
         dagger: '2.16'
     ]
 ]
@@ -13,10 +13,10 @@ ext.versions = [
 // Additional versions which may reference to core versions
 ext.versions += [
     kotlin: [
-        kotlin: '1.2.41',
-        serialization: '0.5.0',
+        kotlin: '1.2.50',
+        serialization: '0.5.1',
         reflectLite: '1.0.0',
-        ktx: '1.0.0-alpha1'
+        ktx: '1.0.0-alpha3'
     ],
     androidx: [
         compat: '1.0.0-alpha3',
@@ -49,16 +49,16 @@ ext.versions += [
         kotlinxConverter: '0.0.1'
     ],
     rx: [
-        java: '2.1.12',
+        java: '2.1.16',
         android: '2.0.2',
         kotlin: '2.2.0',
-        modern: '1.0.0'
+        modern: '1.2.1'
     ],
     utils: [
         inputMask: '3.4.0',
         trayPrefs: '0.12.0',
         cicerone: 'b1ecd6d202',
-        mvvmkit: '900d63b865'
+        mvvmkit: '49d466bcfd'
     ],
     view: [
         circularImageView: '3.0.2'
@@ -69,7 +69,7 @@ ext.versions += [
         timber: '4.7.0'
     ],
     plugins: [
-        versions: '0.17.0'
+        versions: '0.20.0'
     ]
 ]
 
@@ -125,7 +125,7 @@ ext.deps = [
         java: "io.reactivex.rxjava2:rxjava:$versions.rx.java",
         android: "io.reactivex.rxjava2:rxandroid:$versions.rx.android",
         kotlin: "io.reactivex.rxjava2:rxkotlin:$versions.rx.kotlin",
-        modern: "com.github.SunnyDayDev:ModernRx:$versions.rx.modern@aar"
+        modern: "me.sunnydaydev:modern-rx:$versions.rx.modern@aar"
     ],
     network: [
         gson: "com.google.code.gson:gson:$versions.network.gson",
@@ -167,17 +167,18 @@ ext.deps += [
 
 ext.handleRepositories = { handler, buildScript ->
 
+    handler.maven { url "https://kotlin.bintray.com/kotlinx" }
     handler.google()
     handler.jcenter()
     handler.mavenCentral()
     handler.maven { url 'http://dl.bintray.com/kotlin/kotlin-eap' }
     handler.maven { url 'https://maven.fabric.io/public' }
-    handler.maven { url 'http://www.idescout.com/maven/repo/' }
-    handler.maven { url "https://kotlin.bintray.com/kotlinx" }
 
     if (!buildScript) {
         handler.maven { url 'https://jitpack.io' }
     }
+
+    handler.maven { url 'http://www.idescout.com/maven/repo/' }
 
     handler.flatDir { dirs 'libs' }
 
@@ -252,8 +253,8 @@ ext.defaultAndroidModule = {
         buildTypes {
 
             release {
-                minifyEnabled false
-                proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+                // minifyEnabled false
+                // proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             }
 
         }

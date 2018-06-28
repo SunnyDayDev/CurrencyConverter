@@ -17,7 +17,7 @@ buildscript {
 
 }
 
-allprojects {
+subprojects {
 
     apply from: "$project.rootProject.projectDir/common.gradle"
     handleRepositories(repositories, false)
@@ -28,10 +28,6 @@ allprojects {
         handleRepositories(repositories, true)
 
     }
-
-}
-
-subprojects {
 
     project.configurations.all {
 

@@ -4,6 +4,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.OnLifecycleEvent
 import androidx.databinding.Bindable
 import android.os.SystemClock
+import androidx.lifecycle.LifecycleObserver
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.rxkotlin.Observables
@@ -13,6 +14,7 @@ import io.reactivex.subjects.BehaviorSubject
 import me.sunnydaydev.curencyconverter.coregeneral.rx.defaultSchedulers
 import me.sunnydaydev.curencyconverter.coregeneral.rx.retryWithDelay
 import me.sunnydaydev.curencyconverter.coreui.viewModel.BaseVewModel
+import me.sunnydaydev.curencyconverter.coreui.viewModel.LifecycleViewModel
 import me.sunnydaydev.curencyconverter.coreui.viewModel.ViewModelState
 import me.sunnydaydev.curencyconverter.domain.currencies.Currency
 import me.sunnydaydev.curencyconverter.domain.currencies.CurrencyRates
@@ -21,6 +23,7 @@ import me.sunnydaydev.mvvmkit.observable.Command
 import me.sunnydaydev.mvvmkit.observable.MVVMArrayList
 import me.sunnydaydev.mvvmkit.observable.MVVMList
 import me.sunnydaydev.mvvmkit.observable.bindable
+import me.sunnydaydev.mvvmkit.util.ViewLifeCycle
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
@@ -38,8 +41,9 @@ import javax.inject.Singleton
 internal class ConverterViewModel @Inject constructor(
         private val interactor: ConverterInteractor,
         private val itemViewModelFactory: CurrencyItemViewModel.Factory,
-        private val core: ConverterViewModel.Core
-): BaseVewModel() {
+        private val core: ConverterViewModel.Core,
+        viewLifeCycle: ViewLifeCycle
+): LifecycleViewModel(viewLifeCycle), LifecycleObserver {
 
     companion object {
 
@@ -132,7 +136,7 @@ internal class ConverterViewModel @Inject constructor(
                 .defaultSchedulers()
                 .subscribeIt(
                         onSuccess = { (currencies, order) -> handleCurrencies(currencies, order) },
-                        onError = SimpleErrorHandler(false) {
+                        onError = SimpleErrorHandler(false) { _ ->
                             state = ViewModelState.ERROR
                         }
                 )
@@ -265,15 +269,13 @@ internal class ConverterViewModel @Inject constructor(
                 rates.getOrElse(currencyCode) { 0.0 } * nonNullBase
             }
 
-            val sourceDisposable = OptionalDisposable()
-            return base
-                    .flatMap {
-                        val isBase = currencyCode == it
-                        val source = amountSource.map { isBase to it }
-                        sourceDisposable.dispose()
-                        if (!isBase)  source.disposeBy(sourceDisposable)
-                        else source.firstElement().toObservable()
-                    }
+            return base.switchMap {
+                val isBase = currencyCode == it
+                val source = amountSource.map { isBase to it }
+                if (!isBase)  source
+                else source.firstElement().toObservable()
+                        .concatWith(Observable.never())
+            }
 
         }
 

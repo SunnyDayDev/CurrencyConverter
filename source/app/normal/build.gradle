@@ -4,11 +4,14 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'io.fabric'
 
+apply plugin: 'com.github.ben-manes.versions'
+
 buildscript {
 
     dependencies {
 
         classpath deps.debug.fabricPlugin
+        classpath deps.plugins.versions
 
     }
 

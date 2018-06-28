@@ -10,9 +10,10 @@ import me.sunnydaydev.curencyconverter.converter.ConverterViewModel
 import me.sunnydaydev.curencyconverter.coregeneral.di.ComponentRequirements
 import me.sunnydaydev.curencyconverter.coregeneral.di.CoreProvider
 import me.sunnydaydev.curencyconverter.coreui.di.Injector
+import me.sunnydaydev.curencyconverter.coreui.di.MVVMModule
+import me.sunnydaydev.curencyconverter.coreui.viewModel.VMFactory
+import me.sunnydaydev.curencyconverter.coreui.viewModel.ViewModelKey
 import me.sunnydaydev.curencyconverter.domain.currencies.di.CurrenciesDomainProvider
-import me.sunnydaydev.mvvmkit.viewModel.InjectableViewModelFactory
-import me.sunnydaydev.mvvmkit.viewModel.ViewModelKey
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -44,7 +45,7 @@ interface ConverterComponent: Injector<ConverterFragment> {
 
 }
 
-@Module
+@Module(includes = [MVVMModule::class])
 internal interface ConverterBindModule {
 
     @Binds
@@ -55,5 +56,5 @@ internal interface ConverterBindModule {
 }
 
 internal class Injection @Inject constructor(
-        val vmFactory: InjectableViewModelFactory
+        val vmFactory: VMFactory
 )
