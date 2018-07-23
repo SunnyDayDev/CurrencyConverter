@@ -3,9 +3,9 @@ ext.versions = [
     compileSdk: 28,
     targetSdk: 28,
     minSdk: 17,
-    buildTools: '28.0.0',
+    buildTools: '28.0.1',
     core: [
-        androidPlugin: '3.2.0-beta01',
+        androidPlugin: '3.3.0-alpha03',
         dagger: '2.16'
     ]
 ]
@@ -13,15 +13,15 @@ ext.versions = [
 // Additional versions which may reference to core versions
 ext.versions += [
     kotlin: [
-        kotlin: '1.2.50',
-        serialization: '0.5.1',
+        kotlin: '1.2.51',
+        serialization: '0.6.0',
         reflectLite: '1.0.0',
-        ktx: '1.0.0-alpha3'
+        ktx: '1.0.0-beta01'
     ],
     androidx: [
-        compat: '1.0.0-alpha3',
-        constraint: '1.1.1',
-        flex: '0.3.2',
+        compat: '1.0.0-beta01',
+        constraint: '1.1.2',
+        flex: '1.1.0-beta1',
         multidex: '2.0.0',
         arch: [
             lifeCycle: '2.0.0-alpha1',
@@ -29,39 +29,39 @@ ext.versions += [
         ]
     ],
     googleServices: [
-        plugin: '3.2.1',
+        plugin: '4.0.1',
         general: '15.0.1',
     ],
     firebase: [
-        core: '16.0.0',
-        messaging: '17.0.0',
-        analytics: '16.0.0'
+        core: '16.0.1',
+        messaging: '17.1.0',
+        analytics: '16.0.1'
     ],
     dataBinding: [
-        lastAdapter: 'androidx-1.0.0-alpha3',
+        lastAdapter: '3be6af1cde',
         compiler: versions.core.androidPlugin
     ],
     network: [
-        gson: '2.8.0',
+        gson: '2.8.5',
         retrofit: '2.4.0',
-        okhttp: '3.10.0',
+        okhttp: '3.11.0',
         glide: '4.7.1',
         kotlinxConverter: '0.0.1'
     ],
     rx: [
-        java: '2.1.16',
+        java: '2.1.17',
         android: '2.0.2',
         kotlin: '2.2.0',
         modern: '1.2.1'
     ],
     utils: [
-        inputMask: '3.4.0',
+        inputMask: '3.4.4',
         trayPrefs: '0.12.0',
         cicerone: 'b1ecd6d202',
-        mvvmkit: '49d466bcfd'
+        mvvmkit: 'c70fc5368a'
     ],
     view: [
-        circularImageView: '3.0.2'
+        circularImageView: '3.2.0'
     ],
     debug: [
         fabricPlugin: '1.25.4',

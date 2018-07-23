@@ -18,56 +18,66 @@
 
     </data>
 
-    <androidx.constraintlayout.ConstraintLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".ConverterActivity">
 
         <LinearLayout
             android:id="@+id/connectionLost"
+            visible="@{vm.connectionLost}"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
             android:background="@color/palette_red"
-            android:padding="16dp"
             android:gravity="center"
-            visible="@{vm.connectionLost}">
+            android:orientation="vertical"
+            android:padding="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/palette_white"
-                android:text="@string/prompt_connection_lost_error"/>
+                android:text="@string/prompt_connection_lost_error"
+                android:textColor="@color/palette_white" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/palette_white"
                 android:text="@{@string/prompt_connection_lost_time(vm.connectionLostTime)}"
-                tools:text="@string/prompt_connection_lost_time"/>
+                android:textColor="@color/palette_white"
+                tools:text="@string/prompt_connection_lost_time" />
 
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
+            recyclerView_canItemDropOver="@{vm::canDropOverItem}"
             recyclerView_items="@{vm.currencies}"
             recyclerView_itemsLayoutMap="@{bindings.currencyItemsMap}"
+            recyclerView_onItemMoved="@{vm::onItemMoved}"
             scrollToPosition="@{vm.scrollToPositionCommand}"
             visible="@{vm.state == ViewModelState.CONTENT}"
-            recyclerView_onItemMoved="@{vm::onItemMoved}"
-            recyclerView_canItemDropOver="@{vm::canDropOverItem}"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:orientation="vertical"
             android:background="@color/colorAccent"
+            android:orientation="vertical"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/connectionLost"
             tools:listitem="@layout/converter_currency_item_layout" />
 
-        <androidx.constraintlayout.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/progress"
+            visible="@{vm.state == ViewModelState.LOADING}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            visible="@{vm.state == ViewModelState.LOADING}"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:visibility="gone">
 
             <ProgressBar
@@ -100,13 +110,17 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/progressbar" />
 
-        </androidx.constraintlayout.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.ConstraintLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/error"
             visible="@{vm.state == ViewModelState.ERROR}"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:visibility="gone">
 
             <TextView
@@ -126,6 +140,7 @@
 
             <Button
                 android:id="@+id/error_retry_button"
+                onClick="@{vm::onRetryClicked}"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -134,7 +149,6 @@
                 android:layout_marginBottom="16dp"
                 android:text="@string/prompt_retry"
                 android:textColor="@color/palette_white"
-                onClick="@{vm::onRetryClicked}"
                 app:backgroundTint="@color/colorPrimary"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -142,8 +156,8 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/error_text" />
 
-        </androidx.constraintlayout.ConstraintLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </androidx.constraintlayout.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
